@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2018_06_05_022550) do
     t.text "url"
     t.float "price"
     t.string "currency"
-    t.text "images"
+    t.text "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

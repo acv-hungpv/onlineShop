@@ -1,0 +1,17 @@
+<%= render 'shared/page_title', title: "showing detail product: " %>
+<div class = "well col-md-10 col-md-offset-1">
+
+  <p>
+    Name: <%= @product.name %> <br>
+    Description: <%= @product.description %> <br>
+    URL: <%= @product.url %> <br>
+    Price: <%= @product.price %> <%= @product.currency %> <br>
+    Image_Url: <%= @product.image %> <br>
+    Create: <%= time_ago_in_words(@product.created_at) %> ago <br>
+    Update: <%= time_ago_in_words(@product.updated_at) %> ago <br>
+    Category name:
+    <% @product.categories.each do |c| %>
+      <%= c.name %>
+    <% end %>
+  </p>
+</div>
