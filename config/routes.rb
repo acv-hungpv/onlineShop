@@ -8,7 +8,14 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  resources :users, except: [:new]
+  resources :users, except: [:new] do
+    collection do 
+      post 'addcart'
+      get 'cart'
+    end
+  end
+
   resources :products, except: [:new]
+  
   resources :categories, except: [:new]
 end

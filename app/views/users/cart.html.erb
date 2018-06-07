@@ -1,0 +1,22 @@
+<div align = "center" >
+  <table>
+    <% if current_user != nil && current_user.items.count != 0%>
+      <tr>
+        <td> IMG</td>
+        <td>Product name</td>
+        <td>Price </td>
+        <td>Amounts</td>
+      </tr>
+      <% current_user.items.each do |item| %>
+        <tr>
+          <td> <%= image_tag item.product.image , size: 100 %></td>
+          <td><%= item.product.name.capitalize %></td>
+          <td><%= item.product.price %> <%= item.product.currency %></td>
+          <td><%= item.amounts%></td>
+        </tr>
+    <% end %>
+  <% else %>
+    <p>Did not have products in cart </p>
+  <% end %>
+  </table>
+</div>

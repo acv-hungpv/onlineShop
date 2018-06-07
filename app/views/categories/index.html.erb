@@ -1,11 +1,11 @@
-<%= render 'shared/page_title', title: "showing all list categories" %>
+<%= render 'shared/page_title', title: "showing all type products" %>
 
 <div align = "center" >
   <%= will_paginate %>
   <% @categories.each do |category| %>
       <% if category.products != nil %>
         <br>
-        Category: <b><%= category.name.capitalize %></b>
+        Type: <b><%= category.name.capitalize %></b>
         <p>
          <span class="quiet"><small>Created <%= time_ago_in_words(category.created_at) %> ago </small></span>
         </p> 

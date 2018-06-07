@@ -38,6 +38,23 @@ class UsersController < ApplicationController
   def destroy
 
   end
+
+  def addcart
+    @product_id = params[:product_id]
+    if current_user != nil
+      if current_user.items.count == 0 || current_user.items.find_by(product_id: @product_id) == nil
+        current_user.items.build(product_id: @product_id).save!
+      else 
+        current_item = current_user.items.find_by(product_id: @product_id)
+        current_item.amounts += 1
+        current_item.save
+      end
+    end
+  end
+
+  def cart
+
+  end
   
   private
 
