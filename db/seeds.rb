@@ -62,7 +62,7 @@ category_names.each do |name_had_created|
                                    url: output['products'][i]['url'],
                                    price: output['products'][i]['price'],
                                    currency: output['products'][i]['currency'],
-                                   images: output['products'][i]['images'])
+                                   image: output['products'][i]['images'][0])
           category_row.products << product
         end
       end

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   end
   
   def create
+    debugger
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
@@ -19,10 +20,7 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-  
-  def show
-
-  end
+   
   
   def edit
   

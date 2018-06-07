@@ -22,8 +22,10 @@ ActiveRecord::Schema.define(version: 2018_06_05_022550) do
   end
 
   create_table "product_categories", force: :cascade do |t|
-    t.integer "product_id"
-    t.integer "category_id"
+    t.bigint "category_id"
+    t.bigint "product_id"
+    t.index ["category_id"], name: "index_product_categories_on_category_id"
+    t.index ["product_id"], name: "index_product_categories_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -32,7 +34,7 @@ ActiveRecord::Schema.define(version: 2018_06_05_022550) do
     t.text "url"
     t.float "price"
     t.string "currency"
-    t.text "images"
+    t.text "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
