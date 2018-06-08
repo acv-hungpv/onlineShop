@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :users, except: [:new] do
     collection do 
+      post 'change_cart'
       post 'addcart'
       get 'cart'
     end

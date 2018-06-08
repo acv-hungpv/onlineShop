@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   end
   
   def create
-    debugger
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
@@ -43,11 +42,17 @@ class UsersController < ApplicationController
     @product_id = params[:product_id]
     if current_user != nil
       if current_user.items.count == 0 || current_user.items.find_by(product_id: @product_id) == nil
-        current_user.items.build(product_id: @product_id).save!
-      else 
+        current_user.items.build(product_id: @product_id, amounts: 1).save!
+      elsif 
         current_item = current_user.items.find_by(product_id: @product_id)
         current_item.amounts += 1
         current_item.save
+      end
+    else
+      if session[:cart][@product_id] == nil
+        session[:cart][@product_id] = 1
+      else
+        session[:cart][@product_id] = (session[:cart][@product_id]).to_i + 1
       end
     end
   end
@@ -55,6 +60,21 @@ class UsersController < ApplicationController
   def cart
 
   end
+  
+  def change_cart
+    product_id = params[:cart][:product_id]
+    amounts = params[:cart][:amounts]
+    if current_user != nil
+
+      item = current_user.items.find_by(product_id: product_id)
+      item.amounts = amounts
+      item.save
+    else
+      session[:cart][product_id] = amounts
+    end
+    redirect_to cart_users_path
+    
+  end  
   
   private
 

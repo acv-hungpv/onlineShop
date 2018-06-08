@@ -6,17 +6,53 @@
         <td>Product name</td>
         <td>Price </td>
         <td>Amounts</td>
+        <td>Total prices</td>
       </tr>
       <% current_user.items.each do |item| %>
         <tr>
           <td> <%= image_tag item.product.image , size: 100 %></td>
           <td><%= item.product.name.capitalize %></td>
           <td><%= item.product.price %> <%= item.product.currency %></td>
-          <td><%= item.amounts%></td>
+          <td>
+            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+              <%= f.number_field :amounts,
+                :value => item.amounts,
+                 min: 1 %>
+              <%= f.hidden_field :product_id, :value => item.product.id %>
+              <%= f.submit  "change"%>
+
+            <% end %>
+          </td>
+          <td><%= item.product.price*item.amounts %></td>
         </tr>
     <% end %>
-  <% else %>
-    <p>Did not have products in cart </p>
-  <% end %>
+    <% elsif session[:cart] != nil && session[:cart].count != 0%>
+      <tr>
+        <td> IMG</td>
+        <td>Product name</td>
+        <td>Price </td>
+        <td>Amounts</td>
+        <td>Total prices</td>
+      </tr> 
+      <% session[:cart].each do |product_id, amounts|%>
+        <% product = Product.find(product_id) %>
+          <td> <%= image_tag product.image , size: 100 %></td>
+          <td><%= product.name.capitalize %></td>
+          <td><%= product.price %> <%= product.currency %></td>
+          <td>
+            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+              <%= f.number_field :amounts,
+                :value => amounts,
+                 min: 1 %>
+              <%= f.hidden_field :product_id, :value => product_id %>
+              <%= f.submit  "change"%>
+
+            <% end %>
+          </td>
+          <td><%= product.price*amounts.to_i %></td>
+      <% end %>
+    <% else %>
+      <p>Did not have products in cart </p>
+    <% end %>
   </table>
 </div>
