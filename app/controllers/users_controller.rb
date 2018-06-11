@@ -73,8 +73,22 @@ class UsersController < ApplicationController
       session[:cart][product_id] = amounts
     end
     redirect_to cart_users_path
-    
   end  
+
+  def delete_cart
+    if current_user != nil
+      item = Item.find(params['format'])
+      return redirect_to cart_users_path, notice: 'you have successfully delete item' if item.destroy
+      flash.now[:notice] = 'There is an error in your delete item'
+      render :new
+    else
+      product_id = params['format']
+      session[:cart].delete(product_id)
+      flash.now[:notice] = 'you have successfully delete item'
+      redirect_to cart_users_path
+    end
+
+  end
   
   private
 

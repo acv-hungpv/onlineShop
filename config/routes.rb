@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post 'change_cart'
       post 'addcart'
       get 'cart'
+      delete 'delete_cart'
     end
   end
 
