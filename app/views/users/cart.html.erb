@@ -1,6 +1,6 @@
 <div align = "center" >
   <table>
-    <% if current_user != nil && current_user.items.count != 0%>
+    <% if current_user.present? && current_user.items.count != 0%>
       <tr>
         <td> IMG</td>
         <td>Product name</td>

@@ -12,18 +12,18 @@
         <td> <%= image_tag product.image , size: 100 %></td>
         <td><%= product.name.capitalize %></td>
         <td><%= product.price %> </td>
-        <% if current_user != nil %>
+        <% if current_user.present? %>
           <td>
             <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
               <%= f.number_field :amounts,
-                :value => current_user.items.find_by(product_id: @product_id).amounts,
+                :value => find_and_count_amount_product_in_items(@product_id),
                  min: 1 %>
               <%= f.hidden_field :product_id, :value => @product_id %>
               <%= f.submit  "change"%>
 
             <% end %>
           </td>
-          <td><%= product.price*current_user.items.find_by(product_id: @product_id).amounts %></td>
+          <td><%= product.price*find_and_count_amount_product_in_items(@product_id) %></td>
         <% else %>
           <td>
             <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>

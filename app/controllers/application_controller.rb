@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :find_and_count_amount_product_in_items
 
+  def find_and_count_amount_product_in_items(product_id)
+    return current_user.items.find_by(product_id: product_id).amounts
+  end
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
