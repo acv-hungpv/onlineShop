@@ -13,6 +13,18 @@ class SessionsController < ApplicationController
       flash.now[:danger] = "There was something wrong with your login information"
       render 'new'
     end
+
+    session[:cart].each do |product_id, amounts|
+
+      item = current_user.items.find_by(product_id: product_id.to_i)
+      if item == nil
+        current_user.items.build(product_id: product_id, amounts: amounts).save 
+      else
+        item.amounts += amounts.to_i
+        item.save  
+      end
+    end
+    session[:cart] = {}
   end
 
   def destroy

@@ -1,0 +1,43 @@
+<div align = "center" >
+  <% product =  Product.find(@product_id) %>
+    <table>
+      <tr>
+        <td> IMG</td>
+        <td>Product name</td>
+        <td>Price </td>
+        <td>Amounts</td>
+        <td>Total prices</td>
+      </tr>
+      <tr>
+        <td> <%= image_tag product.image , size: 100 %></td>
+        <td><%= product.name.capitalize %></td>
+        <td><%= product.price %> </td>
+        <% if current_user.present? %>
+          <td>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
+              <%= f.number_field :amounts,
+                :value => find_and_count_amount_product_in_items(@product_id),
+                 min: 1 %>
+              <%= f.hidden_field :product_id, :value => @product_id %>
+              <%= f.submit  "change"%>
+
+            <% end %>
+          </td>
+          <td><%= product.price*find_and_count_amount_product_in_items(@product_id) %></td>
+        <% else %>
+          <td>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
+              <%= f.number_field :amounts,
+                :value => session[:cart][@product_id],
+                 min: 1 %>
+              <%= f.hidden_field :product_id, :value => @product_id %>
+              <%= f.submit  "change"%>
+
+            <% end %>
+          </td>
+          <td><%= product.price*session[:cart][@product_id] %></td>
+        <% end %>
+
+      </tr>
+    </table>
+</div>

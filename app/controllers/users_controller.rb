@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   end
   
   def create
-    debugger
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
@@ -38,7 +37,7 @@ class UsersController < ApplicationController
   def destroy
 
   end
-  
+
   private
 
   def user_params
