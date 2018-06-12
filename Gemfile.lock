@@ -47,6 +47,7 @@ GEM
     archive-zip (0.11.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
+    attr_required (1.0.0)
     autoprefixer-rails (8.6.0)
       execjs
     bcrypt (3.1.12)
@@ -93,6 +94,8 @@ GEM
       sort_alphabetical (~> 1.0)
     crass (1.0.4)
     debug_inspector (0.0.3)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
     enumerize (2.2.2)
       activesupport (>= 3.2)
     erubi (1.7.1)
@@ -102,6 +105,8 @@ GEM
       actionpack (>= 3.2.13)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     i18n_data (0.8.0)
@@ -125,6 +130,7 @@ GEM
     marcel (0.3.2)
       mimemagic (~> 0.3.2)
     method_source (0.9.0)
+    mime-types (2.99)
     mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
@@ -133,9 +139,14 @@ GEM
       i18n (>= 0.6.4, < 1.1)
     msgpack (1.2.4)
     multi_json (1.13.1)
+    netrc (0.11.0)
     nio4r (2.3.1)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    paypal-express (0.8.1)
+      activesupport (>= 2.3)
+      attr_required (>= 0.0.5)
+      rest-client
     pg (1.0.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -185,6 +196,10 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
     sass (3.5.6)
@@ -238,6 +253,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.1.11)
       execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     unicode_utils (1.4.0)
     web-console (3.6.2)
       actionview (>= 5.0)
@@ -270,6 +288,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
+  paypal-express
   pg
   pry-byebug
   pry-rails

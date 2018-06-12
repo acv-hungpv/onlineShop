@@ -15,7 +15,7 @@
           <td><%= item.product.name.capitalize %></td>
           <td><%= item.product.price %> <%= item.product.currency %></td>
           <td>
-            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
               <%= f.number_field :amounts,
                 :value => item.amounts,
                  min: 1 %>
@@ -25,7 +25,7 @@
             <% end %>
           </td>
           <td><%= item.product.price*item.amounts %></td>
-          <td><%= link_to "Delete this item", delete_cart_users_path(item), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
+          <td><%= link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
         </tr>
     <% end %>
     <% elsif session[:cart] != nil && session[:cart].count != 0%>
@@ -43,7 +43,7 @@
           <td><%= product.name.capitalize %></td>
           <td><%= product.price %> <%= product.currency %></td>
           <td>
-            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
               <%= f.number_field :amounts,
                 :value => amounts,
                  min: 1 %>
@@ -53,7 +53,7 @@
             <% end %>
           </td>
           <td><%= product.price*amounts.to_i %></td>
-          <td><%= link_to "Delete this item", delete_cart_users_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
+          <td><%= link_to "Delete this item", deletecart_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
       <% end %>
     <% else %>
       <p>Did not have products in cart </p>

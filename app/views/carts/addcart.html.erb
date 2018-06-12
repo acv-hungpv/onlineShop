@@ -14,7 +14,7 @@
         <td><%= product.price %> </td>
         <% if current_user.present? %>
           <td>
-            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
               <%= f.number_field :amounts,
                 :value => find_and_count_amount_product_in_items(@product_id),
                  min: 1 %>
@@ -26,7 +26,7 @@
           <td><%= product.price*find_and_count_amount_product_in_items(@product_id) %></td>
         <% else %>
           <td>
-            <%= form_for :cart, url: {:action => 'change_cart', :controller => 'users'} do |f| %>
+            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
               <%= f.number_field :amounts,
                 :value => session[:cart][@product_id],
                  min: 1 %>

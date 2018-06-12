@@ -13,7 +13,7 @@
           <%= link_to "Details product",product_path(product), class: "btn btn-xs btn-warning" %>
           <%= link_to "Edit this product",edit_product_path(product), class: "btn btn-xs btn-warning" %>
           <%= link_to "Delete this product", product_path(product), method: :delete, data: { confirm: "are you sure"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %>
-          <%= link_to "Add to cart", addcart_users_path(product_id: product), method: :post, class: "btn btn-xs btn-warning" %>
+          <%= link_to "Add to cart", addcart_path(product_id: product), method: :post, class: "btn btn-xs btn-warning" %>
         </div>
       </ul>
     <% end %>

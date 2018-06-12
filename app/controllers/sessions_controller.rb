@@ -15,19 +15,20 @@ class SessionsController < ApplicationController
     end
 
     session[:cart].each do |product_id, amounts|
-      item = current_user.items.find_by(product_id: product_id)
-      if item.present?
-        item.amounts = amounts
-        item.save
+
+      item = current_user.items.find_by(product_id: product_id.to_i)
+      if item == nil
+        current_user.items.build(product_id: product_id, amounts: amounts).save 
       else
-        current_user.items.build(product_id: product_id).save
+        item.amounts += amounts.to_i
+        item.save  
       end
     end
+    session[:cart] = {}
   end
 
   def destroy
     session[:user_id] = nil
-    session[:cart] = {}
     flash[:success] = "you have logged out "
     redirect_to root_path
   end

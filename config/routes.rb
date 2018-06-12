@@ -8,14 +8,12 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  resources :users, except: [:new] do
-    collection do 
-      post 'change_cart'
-      post 'addcart'
-      get 'cart'
-      delete 'delete_cart'
-    end
-  end
+  resources :users, except: [:new] 
+
+  post 'addcart', to: 'carts#addcart'
+  post 'changecart', to: 'carts#changecart'
+  get 'cart', to: 'carts#cart'
+  delete 'deletecart', to: 'carts#deletecart'
 
   resources :products, except: [:new]
   
