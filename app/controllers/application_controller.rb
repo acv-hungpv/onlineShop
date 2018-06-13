@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :null_session
   helper_method :current_user, :logged_in?, :find_and_count_amount_product_in_items
 
   def find_and_count_amount_product_in_items(product_id)

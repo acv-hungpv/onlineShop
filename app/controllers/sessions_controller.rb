@@ -8,14 +8,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       session[:user_id] = user.id
       flash[:success] = "you have successfully logged in"
-      redirect_to users_path
-    else
-      flash.now[:danger] = "There was something wrong with your login information"
-      render 'new'
-    end
-
-    session[:cart].each do |product_id, amounts|
-
+      session[:cart].each do |product_id, amounts|
       item = current_user.items.find_by(product_id: product_id.to_i)
       if item == nil
         current_user.items.build(product_id: product_id, amounts: amounts).save 
@@ -23,11 +16,19 @@ class SessionsController < ApplicationController
         item.amounts += amounts.to_i
         item.save  
       end
+      redirect_to users_path
     end
     session[:cart] = {}
+    else
+      flash.now[:danger] = "There was something wrong with your login information"
+      render 'new'
+    end
+
+
   end
 
   def destroy
+    debugger
     session[:user_id] = nil
     flash[:success] = "you have logged out "
     redirect_to root_path

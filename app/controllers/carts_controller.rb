@@ -21,6 +21,7 @@ class CartsController < ApplicationController
   def carts
 
   end
+
   
   def changecart
     product_id = (params[:cart][:product_id]).to_i
