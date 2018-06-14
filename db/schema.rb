@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2018_06_13_041842) do
     t.bigint "product_id"
     t.bigint "user_id"
     t.bigint "payment_id"
+    t.boolean "ispayment", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["payment_id"], name: "index_items_on_payment_id"
@@ -34,10 +35,8 @@ ActiveRecord::Schema.define(version: 2018_06_13_041842) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.bigint "item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["item_id"], name: "index_payments_on_item_id"
   end
 
   create_table "product_categories", force: :cascade do |t|

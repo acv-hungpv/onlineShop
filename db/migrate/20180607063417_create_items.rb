@@ -5,6 +5,7 @@ class CreateItems < ActiveRecord::Migration[5.2]
       t.references :product, index: true
       t.references :user, index: true
       t.references :payment, index: true
+      t.boolean :ispayment, default: false
       t.timestamps
     end
   end

@@ -1,13 +1,17 @@
 class CartsController < ApplicationController
   def addcart
     @product_id = (params[:product_id]).to_i
+    @item = nil
     if current_user.present?
-      if current_user.items.count == 0 || current_user.items.find_by(product_id: @product_id).blank?
-        current_user.items.build(product_id: @product_id, amounts: 1).save!
-      elsif 
-        current_item = current_user.items.find_by(product_id: @product_id)
-        current_item.amounts += 1
-        current_item.save
+      item = find_item_in_addcart(@product_id)
+      if (item == nil)
+        item = current_user.items.build(product_id: @product_id, amounts: 1)
+        item.save
+        @item = item
+      else
+        item.amounts += 1
+        item.save
+        @item = item
       end
     else
       if session[:cart][@product_id].nil?
@@ -27,7 +31,7 @@ class CartsController < ApplicationController
     product_id = (params[:cart][:product_id]).to_i
     amounts = params[:cart][:amounts]
     if current_user.present?
-      item = current_user.items.find_by(product_id: product_id)
+      item = find_item_in_addcart(product_id)
       item.amounts = amounts
       item.save
     else
