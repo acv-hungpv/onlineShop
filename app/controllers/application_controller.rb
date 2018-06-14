@@ -2,7 +2,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   helper_method :current_user, :logged_in?,
                 :find_item_in_addcart,
-                :count_item_to_show_content_in_cart?
+                :count_item_to_show_content_in_cart?,
+                :total_money_in_payment
+  def total_money_in_payment(payment)
+    total = 0
+    payment.items.each do |item|
+      total += item.amounts*item.product.price
+    end
+    return total
+  end
 
   def count_item_to_show_content_in_cart?
     return current_user.items.pluck(:ispayment).count(false) > 0

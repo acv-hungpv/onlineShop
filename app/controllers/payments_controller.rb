@@ -1,8 +1,9 @@
 class PaymentsController < ApplicationController
+  before_action :set_payment, only: [:show]
   $item_ids = nil
 
   def index
-    @payments = Payment.all
+    @payments = Payment.paginate(page: params[:page], per_page: 20)
   end
 
   def create
@@ -43,8 +44,13 @@ class PaymentsController < ApplicationController
   def success
     payment = PayPal::SDK::REST::Payment.find(params[:paymentId])
     if payment.execute( :payer_id => params[:PayerID] )
-      flash[:success] = "successfully payment"
-      payment = Payment.create
+      flash[:success] = "Successfully payment"
+      response = {}
+      response[:paymentId] = params[:paymentId]
+      response[:token] = params[:token]
+      response[:PayerID] = params[:PayerID]
+      payment = Payment.create(response: response)
+      #binding.pry
       $item_ids.each do |i|
         item = Item.find(i)
         item.ispayment = true
@@ -53,11 +59,18 @@ class PaymentsController < ApplicationController
       end
     else
       payment.error # Error Hash
-      flash[:danger] = "there was something wrong"
-      puts payment.error
-      #binding.pry
-      puts payment.error
+      flash[:danger] = "There was something wrong"
     end
     redirect_to cart_path
+  end
+
+  def show
+
+  end
+
+  private
+
+  def set_payment
+    @payment = Payment.find(params[:id])
   end
 end

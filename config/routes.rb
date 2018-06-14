@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'cart', to: 'carts#cart'
   delete 'deletecart', to: 'carts#deletecart'
 
-  resources :payments, only: [:index, :create] do 
+  resources :payments, only: [:index, :create, :show] do 
     collection do 
       get 'success'
     end
