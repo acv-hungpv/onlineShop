@@ -1,20 +1,20 @@
 class CartsController < ApplicationController
+  include CartHelper
   def addcart
     @product_id = (params[:product_id]).to_i
     @item = nil
     if current_user.present?
       item = find_item_in_addcart(@product_id)
-      if (item == nil)
+      if (item.blank?)
         item = current_user.items.build(product_id: @product_id, amounts: 1)
         item.save
-        @item = item
       else
         item.amounts += 1
         item.save
-        @item = item
       end
+      @item = item
     else
-      if session[:cart][@product_id].nil?
+      if session[:cart][@product_id].blank?
         session[:cart][@product_id] = 1
       else
         session[:cart][@product_id] = (session[:cart][@product_id]).to_i + 1

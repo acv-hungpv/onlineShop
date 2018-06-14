@@ -1,24 +1,24 @@
 class PaymentsController < ApplicationController
+  include PaymentHelper
   before_action :set_payment, only: [:show]
-  $item_ids = nil
+  $items = nil
 
   def index
     @payments = Payment.paginate(page: params[:page], per_page: 20)
   end
 
   def create
-    $item_ids = params[:item_ids]
-    if $item_ids.nil?
+    item_ids = params[:item_ids]
+    if item_ids.nil?
       flash[:danger] = "please select items to payment"
       redirect_to cart_path
     else 
       totals = 0
-      $item_ids.each do |i|
-        item = Item.find(i)
+      $items = Item.where(id: item_ids)
+      $items.each do |item|
         product = item.product
         totals += (product.price)*(item.amounts)
       end
-      #binding.pry
       @payment = PayPal::SDK::REST::Payment.new({
         intent: "sale",
         payer: {
@@ -50,9 +50,7 @@ class PaymentsController < ApplicationController
       response[:token] = params[:token]
       response[:PayerID] = params[:PayerID]
       payment = Payment.create(response: response)
-      #binding.pry
-      $item_ids.each do |i|
-        item = Item.find(i)
+      $items.each do |item|
         item.ispayment = true
         item.save
         payment.items << item

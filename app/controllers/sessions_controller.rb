@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       flash[:success] = "you have successfully logged in"
       session[:cart].each do |product_id, amounts|
         item = find_item_in_addcart(product_id.to_i)
-        if item == nil
+        if item.blank?
           current_user.items.build(product_id: product_id, amounts: amounts).save 
         else
           item.amounts += amounts.to_i

@@ -1,29 +1,38 @@
-<div align = "center" >
-  <%= will_paginate @payments%>
-  <table>
-    <tr>
-      <td>Name product</td>
-      <td>Price</td>
-      <td>Amounts</td>
-      <td>Total</td>
-      <td>Time payment</td>
-      <td>Detail payment</td>
-    </tr>
-    <% @payments.each do |payment| %>
-      <% payment.items.each do |item| %>
-        <tr>
-          <td><%= item.product.name %></td>
-          <td><%= item.product.price %></td>
-          <td><%= item.amounts %></td>
-          <td><%= (item.amounts*item.product.price).round(2) %></td>
-          <td><%= time_ago_in_words(payment.created_at) %> ago</td>
-          <td>
-            <%= link_to "Details payment",payment_path(payment), class: "btn btn-xs btn-warning" %>
-          </td>
-        </tr>
+<%= render 'shared/page_title', title: "list all payment history" %>
+<% if current_user.present? && ispayment? %>
+  <div align = "center" >
+    <%= will_paginate @payments%>
+    <table>
+      <tr>
+        <td>Name product</td>
+        <td>Price</td>
+        <td>Amounts</td>
+        <td>Total</td>
+        <td>Time payment</td>
+        <td>Detail payment</td>
+      </tr>
+      <% @payments.each do |payment| %>
+        <% payment.items.each do |item| %>
+          <% if current_user == item.user %>
+            <tr>
+              <td><%= item.product.name %></td>
+              <td><%= item.product.price %></td>
+              <td><%= item.amounts %></td>
+              <td><%= multiplication(item.product.price,item.amounts) %></td>
+              <td><%= time_ago_in_words(payment.created_at) %> ago</td>
+              <td>
+                <%= link_to "Details payment",payment_path(payment), class: "btn btn-xs btn-warning" %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
       <% end %>
-    <% end %>
 
-  </table>
-  <%= will_paginate @payments %>
-</div>
+    </table>
+    <%= will_paginate @payments %>
+  </div>
+<% else %>
+  <div class="center">
+    <p>Did not have any payment</p>
+  </div>
+<% end %>

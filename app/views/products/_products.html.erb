@@ -5,7 +5,7 @@
       <ul >
         <li><%= image_tag product.image , size: 400 %></li>
         <li ><%= product.name.capitalize %></li>
-        <li ><%= product.price %> <%= product.currency%></li>
+        <li ><%= product.price %> <%= product.currency %></li>
         <p>
          <span class="quiet"><small>Created <%= time_ago_in_words(product.created_at) %> ago </small></span>
         </p> 

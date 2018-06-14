@@ -1,7 +1,8 @@
+<%= render 'shared/page_title', title: "list all products in cart" %>
 <div align = "center" >
   <%= form_tag( "/payments", method: :post) do %>
     <table>
-      <% if current_user.present? && count_item_to_show_content_in_cart? %>
+      <% if current_user.present? && is_item_to_show_content_in_cart? %>
         <tr>
           <td> IMG</td>
           <td>Product name</td>
@@ -30,7 +31,7 @@
 
                 <% end %>
               </td>
-              <td><%= (item.product.price*item.amounts).round(2) %></td>
+              <td><%= multiplication(item.product.price,item.amounts) %></td>
               <td><%= link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
               <td>
                 <%= check_box_tag 'item_ids[]', item.id -%>
@@ -38,7 +39,7 @@
             </tr>
           <% end %>
       <% end %>
-      <% elsif session[:cart] != nil && session[:cart].count != 0%>
+      <% elsif !session[:cart].blank? %>
         <tr>
           <td> IMG</td>
           <td>Product name</td>
@@ -48,28 +49,30 @@
           <td>Delete</td>
         </tr> 
         <% session[:cart].each do |product_id, amounts|%>
-          <% product = Product.find(product_id) %>
-            <td> <%= image_tag product.image , size: 100 %></td>
-            <td><%= product.name.capitalize %></td>
-            <td><%= (product.price).round(2) %> <%= product.currency %></td>
-            <td>
-              <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
-                <%= f.number_field :amounts,
-                  :value => amounts,
-                   min: 1 %>
-                <%= f.hidden_field :product_id, :value => product_id %>
-                <%= f.submit "change"%>
+          <% product = find_product(product_id) %>
+            <tr>
+              <td> <%= image_tag product.image , size: 100 %></td>
+              <td><%= product.name.capitalize %></td>
+              <td><%= (product.price).round(2) %> <%= product.currency %></td>
+              <td>
+                <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
+                  <%= f.number_field :amounts,
+                    :value => amounts,
+                     min: 1 %>
+                  <%= f.hidden_field :product_id, :value => product_id %>
+                  <%= f.submit "change"%>
 
-              <% end %>
-            </td>
-            <td><%= (product.price*amounts.to_i).round(2) %></td>
-            <td><%= link_to "Delete this item", deletecart_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
+                <% end %>
+              </td>
+              <td><%= multiplication(product.price,amounts.to_i) %></td>
+              <td><%= link_to "Delete this item", deletecart_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
+            </tr>
         <% end %>
       <% else %>
         <p>Did not have products in cart </p>
       <% end %>
     </table>
-    <% if current_user.present? && count_item_to_show_content_in_cart? %>
+    <% if current_user.present? && is_item_to_show_content_in_cart? %>
       <input class="btn btn-success btn-block btn-lg" type="submit" value="Payment">
     <% end %>
   <% end %>

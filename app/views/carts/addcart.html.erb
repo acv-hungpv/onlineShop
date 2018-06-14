@@ -1,5 +1,6 @@
+<%= render 'shared/page_title', title: "Add product into cart" %>
 <div align = "center" >
-  <% product =  Product.find(@product_id) %>
+  <% product = find_product(@product_id) %>
     <table>
       <tr>
         <td> IMG</td>
@@ -23,7 +24,7 @@
 
             <% end %>
           </td>
-          <td><%= product.price*@item.amounts %></td>
+          <td><%= multiplication(product.price,@item.amounts) %></td>
         <% else %>
           <td>
             <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
@@ -35,7 +36,7 @@
 
             <% end %>
           </td>
-          <td><%= product.price*session[:cart][@product_id] %></td>
+          <td><%= multiplication(product.price,session[:cart][@product_id]) %></td>
         <% end %>
 
       </tr>

@@ -1,15 +1,17 @@
+<%= render 'shared/page_title', title: "show details payment history" %>
+
 <div class="center">
   <b>Delivery address </b>
-  <p> <%= current_user.name%></p>
-  <p> <%= current_user.phone%></p>
-  <p> <%= current_user.address%></p>
+  <p> Name: <%= current_user.name %></p>
+  <p> Phone: <%= current_user.phone %></p>
+  <p> Address: <%= current_user.address %></p>
   <b>Items</b>
   <% @payment.items.each do |item| %>
-    <p><%= item.product.name %></p>
-    <p><%= item.product.price %></p>
-    <p><%= item.amounts %></p>
+    <p>Product name: <%= item.product.name %></p>
+    <p>product price: <%= item.product.price %></p>
+    <p>Amount: <%= item.amounts %></p>
   <% end %>
   <b>Total</b>
-  <p><%= total_money_in_payment(@payment).round(2) %></p>
+  <p><%= total_money_in_payment(@payment).round(2) %> USD</p>
   
 </div>
