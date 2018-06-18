@@ -1,6 +1,8 @@
 class SessionsController < ApplicationController
   def new
-
+    if current_user.present?
+      redirect_to root_path
+    end
   end
 
   def create

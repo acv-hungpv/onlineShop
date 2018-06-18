@@ -26,7 +26,7 @@ end
 
 User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password",
           phone: "01683853169",phone_ship: "01683853169",
-          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")
+          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: true, name_ship: "hung phan")
 User.create(name: "user", email:"hungphan@gmail.com",password: "password", 
           phone: "01683853169",phone_ship: "01683853169",
           address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")

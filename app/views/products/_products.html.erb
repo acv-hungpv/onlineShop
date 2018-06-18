@@ -5,17 +5,20 @@
     <% if product.image != nil %>
       <div class="col-md-4">
         <figure class="card card-product">
-          <div class="img-wrap"><%= image_tag product.image , resize: 180 %></div>
+          <div class="img-wrap">
+            <%= link_to product do %>
+              <%= image_tag(product.image , resize: 180) %>
+            <% end %>
+          </div>
           <figcaption class="info-wrap">
             <h4 class="title"><%= product.name.capitalize %></h4>
             <h4 class="title">Price: <%= product.price %></h4>
-          </figcaption>
-          <div class="bottom-wrap">
-            <%= link_to "Details product",product_path(product), class: "btn btn-xs btn-warning" %>
-            <%= link_to "Edit this product",edit_product_path(product), class: "btn btn-xs btn-warning" %>
-            <%= link_to "Delete this product", product_path(product), method: :delete, data: { confirm: "are you sure"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %>
+            <% if current_user.present? && current_user.admin %>
+              <%= link_to "Edit this product",edit_product_path(product), class: "btn btn-xs btn-warning" %>
+              <%= link_to "Delete this product", product_path(product), method: :delete, data: { confirm: "are you sure"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %>
+            <% end %>
             <%= link_to "Add to cart", addcart_path(product_id: product), method: :post, class: "btn btn-xs btn-warning" %>
-          </div>
+          </figcaption>
         </figure>
       </div>
     <% end %>
