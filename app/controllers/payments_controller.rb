@@ -1,42 +1,66 @@
 class PaymentsController < ApplicationController
   include PaymentHelper
   before_action :set_payment, only: [:show]
-  $items = nil
-
   def index
     @payments = Payment.paginate(page: params[:page], per_page: 20)
   end
 
-  def create
+
+  def ship_infomation
+
+  end
+  
+  def is_items
     item_ids = params[:item_ids]
-    if item_ids.nil?
+    if item_ids.blank?
       flash[:danger] = "please select items to payment"
       redirect_to cart_path
     else 
-      totals = 0
-      $items = Item.where(id: item_ids)
-      $items.each do |item|
-        product = item.product
-        totals += (product.price)*(item.amounts)
-      end
-      @payment = PayPal::SDK::REST::Payment.new({
-        intent: "sale",
-        payer: {
-          payment_method: "paypal" },
-        redirect_urls: {
-          return_url: success_payments_url,
-          cancel_url: root_url },
-        transactions: [ {
-          amount: {
-            total: totals.round(2),
-            currency: "USD" },
-          description: "ExpressBot Payment" } ] } )
-      if @payment.create
-        redirect_url = @payment.links.find {|link| link.rel == 'approval_url'}
-        redirect_to redirect_url.href
-      else
-        redirect_to root_url, notice: @payment.error
-      end
+      $items_payment = Item.where(id: item_ids)
+      redirect_to ship_infomation_payments_path
+    end
+  end
+
+  def details 
+    @items = $items_payment
+  end
+
+  def save_ship_infomation
+    ship = params[:ship]
+    current_user.phone_ship = ship[:phone_ship]
+    current_user.address_ship = ship[:address_ship]
+    current_user.name_ship = ship[:name_ship]
+    if current_user.save
+      redirect_to details_payments_path
+    else
+      flash[:danger] = "There was something wrong"
+      redirect_to cart_path
+    end
+  end
+
+  def create
+    totals = 0
+    $items_payment.each do |item|
+      product = item.product
+      totals += (product.price)*(item.amounts)
+    end
+    @payment = PayPal::SDK::REST::Payment.new({
+      intent: "sale",
+      payer: {
+        payment_method: "paypal" },
+      redirect_urls: {
+        return_url: success_payments_url,
+        cancel_url: root_url },
+      transactions: [ {
+        amount: {
+          total: totals.round(2),
+          currency: "USD" },
+        description: "ExpressBot Payment" } ] } )
+    if @payment.create
+      redirect_url = @payment.links.find {|link| link.rel == 'approval_url'}
+      redirect_to redirect_url.href
+    else
+      redirect_to root_url, notice: @payment.error
     end
   end
 
@@ -50,7 +74,7 @@ class PaymentsController < ApplicationController
       response[:token] = params[:token]
       response[:PayerID] = params[:PayerID]
       payment = Payment.create(response: response)
-      $items.each do |item|
+      $items_payment.each do |item|
         item.ispayment = true
         item.save
         payment.items << item

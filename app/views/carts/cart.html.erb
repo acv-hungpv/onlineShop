@@ -1,6 +1,6 @@
 <%= render 'shared/page_title', title: "list all products in cart" %>
 <div align = "center" >
-  <%= form_tag( "/payments", method: :post) do %>
+  <%= form_tag url_for(:controller => 'payments', :action => 'is_items'), :method => 'post' do %>
     <table>
       <% if current_user.present? && is_item_to_show_content_in_cart? %>
         <tr>
@@ -24,15 +24,14 @@
               <td>
                 <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
                   <%= f.number_field :amounts,
-                    :value => item.amounts,
-                     min: 1 %>
+                    :value => item.amounts, min: 1,:style => "width:70px;", :class => 'form-control' %>
                   <%= f.hidden_field :product_id, :value => item.product.id %>
-                  <%= f.submit  "change"%>
+                  <%= f.submit  "change", :class => "btn btn-default btn-primary" %>
 
                 <% end %>
               </td>
               <td><%= multiplication(item.product.price,item.amounts) %></td>
-              <td><%= link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
+              <td><%= link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, :class => "btn btn-xs btn-danger" %></td>
               <td>
                 <%= check_box_tag 'item_ids[]', item.id -%>
               </td>
@@ -58,9 +57,9 @@
                 <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
                   <%= f.number_field :amounts,
                     :value => amounts,
-                     min: 1 %>
+                     min: 1,:style => "width:70px;", :class => 'form-control' %>
                   <%= f.hidden_field :product_id, :value => product_id %>
-                  <%= f.submit "change"%>
+                  <%= f.submit "change", :class => "btn btn-default btn-primary" %>
 
                 <% end %>
               </td>
@@ -73,7 +72,7 @@
       <% end %>
     </table>
     <% if current_user.present? && is_item_to_show_content_in_cart? %>
-      <input class="btn btn-success btn-block btn-lg" type="submit" value="Payment">
+      <div><%= submit_tag 'Payment', :class => "btn btn-success btn-lg" %></div>
     <% end %>
   <% end %>
 </div>

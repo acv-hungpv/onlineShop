@@ -24,8 +24,12 @@ table.each do |t|
   )
 end
 
-User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password", phone: "01683853169", address:"497 Hoa Hao,P7,Q10,TP.HCM",admin: true)
-User.create(name: "user", email:"hungphan@gmail.com",password: "password", phone: "01683853169", address:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false)
+User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password",
+          phone: "01683853169",phone_ship: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")
+User.create(name: "user", email:"hungphan@gmail.com",password: "password", 
+          phone: "01683853169",phone_ship: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")
 
 
 webhoseio = Webhoseio.new('344a242c-e0fc-4475-9b1d-6d1beb587589')

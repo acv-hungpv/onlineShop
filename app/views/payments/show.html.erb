@@ -2,9 +2,9 @@
 
 <div class="center">
   <b>Delivery address </b>
-  <p> Name: <%= current_user.name %></p>
-  <p> Phone: <%= current_user.phone %></p>
-  <p> Address: <%= current_user.address %></p>
+  <p> Name: <%= current_user.name_ship %></p>
+  <p> Phone: <%= current_user.phone_ship %></p>
+  <p> Address: <%= current_user.address_ship %></p>
   <b>Items</b>
   <% @payment.items.each do |item| %>
     <p>Product name: <%= item.product.name %></p>

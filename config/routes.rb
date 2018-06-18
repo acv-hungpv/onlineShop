@@ -18,6 +18,11 @@ Rails.application.routes.draw do
   resources :payments, only: [:index, :create, :show] do 
     collection do 
       get 'success'
+      post 'is_items'
+      get 'ship_infomation'
+      post 'save_ship_infomation'
+      get 'details'
+
     end
   end
 
