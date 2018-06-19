@@ -48,7 +48,7 @@ class UsersController < ApplicationController
         redirect_to login_path
       else
         flash[:notice] = "Email not exist"
-        redirect_to get_forgot_password_users_path
+        redirect_to forgot_password_users_path
       end
     end
   end
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
         redirect_to login_path
       else
         flash[:notice] = "There was something wrong"
-        redirect_to get_edit_password_reset_users_path
+        redirect_to edit_password_reset_users_path
       end
     end
   end
