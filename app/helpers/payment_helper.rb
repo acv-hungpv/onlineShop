@@ -1,4 +1,13 @@
 module PaymentHelper
+  
+  def total_money_in_payment(payment)
+    total = 0
+    payment.items.each do |item|
+      total += item.amounts*item.product.price
+    end
+    return total
+  end
+
   def multiplication(price,amount)
     return (price*amount).round(2)
   end

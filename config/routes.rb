@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       get 'success'
       post 'is_items'
       get 'ship_infomation'
-      post 'save_ship_infomation'
+      post 'ship_infomation'
       get 'details'
 
     end

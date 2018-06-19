@@ -7,11 +7,10 @@ class CartsController < ApplicationController
       item = find_item_in_addcart(@product_id)
       if (item.blank?)
         item = current_user.items.build(product_id: @product_id, amounts: 1)
-        item.save
       else
         item.amounts += 1
-        item.save
       end
+      item.save
       @item = item
     else
       if session[:cart][@product_id].blank?

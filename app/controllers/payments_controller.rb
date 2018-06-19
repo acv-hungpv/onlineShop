@@ -5,10 +5,6 @@ class PaymentsController < ApplicationController
     @payments = Payment.paginate(page: params[:page], per_page: 20)
   end
 
-
-  def ship_infomation
-
-  end
   
   def is_items
     item_ids = params[:item_ids]
@@ -25,16 +21,18 @@ class PaymentsController < ApplicationController
     @items = $items_payment
   end
 
-  def save_ship_infomation
-    ship = params[:ship]
-    current_user.phone_ship = ship[:phone_ship]
-    current_user.address_ship = ship[:address_ship]
-    current_user.name_ship = ship[:name_ship]
-    if current_user.save
-      redirect_to details_payments_path
-    else
-      flash[:danger] = "There was something wrong"
-      redirect_to cart_path
+  def ship_infomation
+    if request.post?
+      ship = params[:ship]
+      current_user.phone_ship = ship[:phone_ship]
+      current_user.address_ship = ship[:address_ship]
+      current_user.name_ship = ship[:name_ship]
+      if current_user.save
+        redirect_to details_payments_path
+      else
+        flash[:danger] = "There was something wrong"
+        redirect_to cart_path
+      end
     end
   end
 
