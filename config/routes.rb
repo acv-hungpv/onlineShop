@@ -10,10 +10,10 @@ Rails.application.routes.draw do
 
   resources :users, except: [:new] do 
     collection do 
-      post 'post_forgot_password'
-      get 'get_forgot_password'
-      get 'get_edit_password_reset'
-      post 'post_edit_password_reset'
+      post 'forgot_password'
+      get 'forgot_password'
+      get 'edit_password_reset'
+      post 'edit_password_reset'
     end
   end
 

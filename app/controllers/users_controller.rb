@@ -38,36 +38,33 @@ class UsersController < ApplicationController
 
   end
 
-  def get_forgot_password
 
-  end
-
-  def post_forgot_password
-    @user = User.find_by(email: params[:user][:email])
-  
-    if @user.present?
-      ResetPasswordMailer.reset_password(@user).deliver!
-      flash[:success] = "send email successful"
-      redirect_to login_path
-    else
-      flash[:notice] = "Email not exist"
-      redirect_to get_forgot_password_users_path
+  def forgot_password
+    if request.post?
+      @user = User.find_by(email: params[:user][:email])
+      if @user.present?
+        ResetPasswordMailer.reset_password(@user).deliver!
+        flash[:success] = "send email successful"
+        redirect_to login_path
+      else
+        flash[:notice] = "Email not exist"
+        redirect_to get_forgot_password_users_path
+      end
     end
   end
 
-  def get_edit_password_reset
 
-  end
-
-  def post_edit_password_reset
-    user = User.find(params[:edit_password_reset][:user_id])
-    user.password = params[:edit_password_reset][:password]
-    if user.save
-      flash[:success] = "Change password success"
-      redirect_to login_path
-    else
-      flash[:notice] = "There was something wrong"
-      redirect_to get_edit_password_reset_users_path
+  def edit_password_reset
+    if request.post?
+      user = User.find(params[:edit_password_reset][:user_id])
+      user.password = params[:edit_password_reset][:password]
+      if user.save
+        flash[:success] = "Change password success"
+        redirect_to login_path
+      else
+        flash[:notice] = "There was something wrong"
+        redirect_to get_edit_password_reset_users_path
+      end
     end
   end
 
