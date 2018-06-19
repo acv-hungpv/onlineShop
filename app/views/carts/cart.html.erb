@@ -11,7 +11,7 @@
           <td>Total prices</td>
           <td>Delete</td>
           <td>SelectPayment
-            <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
+            <%= form_for :cart, url: { :action => 'changecart', :controller => 'carts' } do |f| %>
             <% end %>
           </td>
         </tr>
@@ -27,50 +27,22 @@
                     :value => item.amounts, min: 1,:style => "width:70px;", :class => 'form-control' %>
                   <%= f.hidden_field :product_id, :value => item.product.id %>
                   <%= f.submit  "change", :class => "btn btn-default btn-primary" %>
-
                 <% end %>
               </td>
-              <td><%= multiplication(item.product.price,item.amounts) %></td>
+              <td><%= multiplication(item.product.price, item.amounts) %></td>
               <td><%= link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, :class => "btn btn-xs btn-danger" %></td>
               <td>
                 <%= check_box_tag 'item_ids[]', item.id -%>
               </td>
             </tr>
           <% end %>
-      <% end %>
-      <% elsif !session[:cart].blank? %>
-        <tr>
-          <td> IMG</td>
-          <td>Product name</td>
-          <td>Price </td>
-          <td>Amounts</td>
-          <td>Total prices</td>
-          <td>Delete</td>
-        </tr> 
-        <% session[:cart].each do |product_id, amounts|%>
-          <% product = find_product(product_id) %>
-            <tr>
-              <td> <%= image_tag product.image , size: 100 %></td>
-              <td><%= product.name.capitalize %></td>
-              <td><%= (product.price).round(2) %> <%= product.currency %></td>
-              <td>
-                <%= form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f| %>
-                  <%= f.number_field :amounts,
-                    :value => amounts,
-                     min: 1,:style => "width:70px;", :class => 'form-control' %>
-                  <%= f.hidden_field :product_id, :value => product_id %>
-                  <%= f.submit "change", :class => "btn btn-default btn-primary" %>
-
-                <% end %>
-              </td>
-              <td><%= multiplication(product.price,amounts.to_i) %></td>
-              <td><%= link_to "Delete this item", deletecart_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %></td>
-            </tr>
         <% end %>
+        </table>
+      <% elsif !session[:cart].blank? %>
+        <%= render 'session_cart' %>
       <% else %>
         <p>Did not have products in cart </p>
       <% end %>
-    </table>
     <% if current_user.present? && is_item_to_show_content_in_cart? %>
       <div><%= submit_tag 'Payment', :class => "btn btn-success btn-lg" %></div>
     <% end %>

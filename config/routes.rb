@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "pages#home"
   
@@ -8,7 +9,14 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  resources :users, except: [:new] 
+  resources :users, except: [:new] do 
+    collection do 
+      post 'forgot_password'
+      get 'forgot_password'
+      get 'edit_password_reset'
+      post 'edit_password_reset'
+    end
+  end
 
   post 'addcart', to: 'carts#addcart'
   post 'changecart', to: 'carts#changecart'
@@ -20,7 +28,7 @@ Rails.application.routes.draw do
       get 'success'
       post 'is_items'
       get 'ship_infomation'
-      post 'save_ship_infomation'
+      post 'ship_infomation'
       get 'details'
 
     end

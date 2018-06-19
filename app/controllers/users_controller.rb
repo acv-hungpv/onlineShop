@@ -38,6 +38,36 @@ class UsersController < ApplicationController
 
   end
 
+
+  def forgot_password
+    if request.post?
+      @user = User.find_by(email: params[:user][:email])
+      if @user.present?
+        ResetPasswordMailer.reset_password(@user).deliver!
+        flash[:success] = "send email successful"
+        redirect_to login_path
+      else
+        flash[:notice] = "Email not exist"
+        redirect_to forgot_password_users_path
+      end
+    end
+  end
+
+
+  def edit_password_reset
+    if request.post?
+      user = User.find(params[:edit_password_reset][:user_id])
+      user.password = params[:edit_password_reset][:password]
+      if user.save
+        flash[:success] = "Change password success"
+        redirect_to login_path
+      else
+        flash[:notice] = "There was something wrong"
+        redirect_to edit_password_reset_users_path
+      end
+    end
+  end
+
   private
 
   def user_params
