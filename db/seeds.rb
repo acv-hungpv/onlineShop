@@ -8,13 +8,15 @@
 
 require_relative 'webhoseio'
 
-table = ['products', 'users', 'categories', 'product_categories']
+table = ['products', 'users', 'categories', 'product_categories','items','payments']
 auto_inc_val = 1
 
 Product.destroy_all
 User.destroy_all
 Category.destroy_all
 ProductCategory.destroy_all
+Item.destroy_all
+Payment.destroy_all
 
 table.each do |t|
   ApplicationRecord.connection.execute(
@@ -22,8 +24,12 @@ table.each do |t|
   )
 end
 
-User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password", admin: true)
-User.create(name: "user", email:"hungphan@gmail.com",password: "password", admin: false)
+User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password",
+          phone: "01683853169",phone_ship: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: true, name_ship: "hung phan")
+User.create(name: "user", email:"hungphan@gmail.com",password: "password", 
+          phone: "01683853169",phone_ship: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")
 
 
 webhoseio = Webhoseio.new('344a242c-e0fc-4475-9b1d-6d1beb587589')

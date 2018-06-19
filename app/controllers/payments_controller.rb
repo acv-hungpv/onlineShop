@@ -1,18 +1,57 @@
-class PaymentController < ApplicationController
+class PaymentsController < ApplicationController
+  include PaymentHelper
+  before_action :set_payment, only: [:show]
   def index
-    @payments = Payment.all
+    @payments = Payment.paginate(page: params[:page], per_page: 20)
   end
+
+  
+  def is_items
+    item_ids = params[:item_ids]
+    if item_ids.blank?
+      flash[:danger] = "please select items to payment"
+      redirect_to cart_path
+    else 
+      $items_payment = Item.where(id: item_ids)
+      redirect_to ship_infomation_payments_path
+    end
+  end
+
+  def details 
+    @items = $items_payment
+  end
+
+  def ship_infomation
+    if request.post?
+      ship = params[:ship]
+      current_user.phone_ship = ship[:phone_ship]
+      current_user.address_ship = ship[:address_ship]
+      current_user.name_ship = ship[:name_ship]
+      if current_user.save
+        redirect_to details_payments_path
+      else
+        flash[:danger] = "There was something wrong"
+        redirect_to cart_path
+      end
+    end
+  end
+
   def create
+    totals = 0
+    $items_payment.each do |item|
+      product = item.product
+      totals += (product.price)*(item.amounts)
+    end
     @payment = PayPal::SDK::REST::Payment.new({
       intent: "sale",
       payer: {
         payment_method: "paypal" },
       redirect_urls: {
-        return_url: success_orders_url,
+        return_url: success_payments_url,
         cancel_url: root_url },
       transactions: [ {
         amount: {
-          total: "10",
+          total: totals.round(2),
           currency: "USD" },
         description: "ExpressBot Payment" } ] } )
     if @payment.create
@@ -26,16 +65,32 @@ class PaymentController < ApplicationController
   # GET /success
   def success
     payment = PayPal::SDK::REST::Payment.find(params[:paymentId])
-    Order.create(response: JSON(params.slice(:paymentId, :token, :PayerID)))
-    debugger
     if payment.execute( :payer_id => params[:PayerID] )
-      
-      # Success Message
-      # Note that you'll need to `Payment.find` the payment again to access user info like shipping address
+      flash[:success] = "Successfully payment"
+      response = {}
+      response[:paymentId] = params[:paymentId]
+      response[:token] = params[:token]
+      response[:PayerID] = params[:PayerID]
+      payment = Payment.create(response: response)
+      $items_payment.each do |item|
+        item.ispayment = true
+        item.save
+        payment.items << item
+      end
     else
       payment.error # Error Hash
+      flash[:danger] = "There was something wrong"
     end
-    redirect_to root_url, notice: "Payment Succesful"
+    redirect_to cart_path
+  end
 
+  def show
+
+  end
+
+  private
+
+  def set_payment
+    @payment = Payment.find(params[:id])
   end
 end

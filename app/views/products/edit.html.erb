@@ -1,8 +1,8 @@
-<%= render 'shared/page_title', title: "edit an existing product"%>
+<%= render 'shared/page_title', title: "edit an existing product" %>
 <%= render 'shared/errors', obj: @product %>
 <div class = "row">
   <div class="col-md-12"> 
-    <%= form_for(@product, :html  => {class: "form-horizontal",role: "form"}) do |f|%>
+    <%= form_for(@product, :html  => {class: "form-horizontal",role: "form"}) do |f| %>
       <div class = "form-group">
         <div class="control-label col-md-2">
           <%= f.label :name %>

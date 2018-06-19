@@ -3,7 +3,7 @@
 <div align = "center" >
   <%= will_paginate %>
   <% @categories.each do |category| %>
-      <% if category.products != nil %>
+      <% if category.products.present? %>
         <br>
         Type: <b><%= category.name.capitalize %></b>
         <p>

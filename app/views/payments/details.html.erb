@@ -1,0 +1,20 @@
+<%= render 'shared/page_title', title: "show details payment" %>
+
+<div class="center">
+  <b>Delivery address </b>
+  <p> Name: <%= current_user.name_ship %></p>
+  <p> Phone: <%= current_user.phone_ship %></p>
+  <p> Address: <%= current_user.address_ship %></p>
+  <b>Items</b>
+  <% @items.each do |item| %>
+    <p>Name product: <%= item.product.name %></p>
+    <%= image_tag item.product.image , size: 160 %>
+    <p>Price: <%= item.product.price %></p>
+    <p>Amount: <%= item.amounts %></p>
+  <% end %>
+  <b>Total</b>
+  <p><%= total_money_in_items(@items) %> USD</p>
+  <%= form_tag( "/payments", method: :post) do %>
+    <input class="btn btn-success btn-block btn-lg" type="submit" value="Confirm Payment">
+  <% end %>
+</div>

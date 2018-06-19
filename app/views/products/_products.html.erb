@@ -1,22 +1,28 @@
 <div align = "center" >
   <%= will_paginate @products%>
+  <div class="row">
   <% @products.each do |product| %>
     <% if product.image != nil %>
-      <ul >
-        <li><%= image_tag product.image , size: 400 %></li>
-        <li ><%= product.name.capitalize %></li>
-        <li ><%= product.price %> <%= product.currency%></li>
-        <p>
-         <span class="quiet"><small>Created <%= time_ago_in_words(product.created_at) %> ago </small></span>
-        </p> 
-        <div class="product-actions">
-          <%= link_to "Details product",product_path(product), class: "btn btn-xs btn-warning" %>
-          <%= link_to "Edit this product",edit_product_path(product), class: "btn btn-xs btn-warning" %>
-          <%= link_to "Delete this product", product_path(product), method: :delete, data: { confirm: "are you sure"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %>
-          <%= link_to "Add to cart", addcart_path(product_id: product), method: :post, class: "btn btn-xs btn-warning" %>
-        </div>
-      </ul>
+      <div class="col-md-4">
+        <figure class="card card-product">
+          <div class="img-wrap">
+            <%= link_to product do %>
+              <%= image_tag(product.image , resize: 180) %>
+            <% end %>
+          </div>
+          <figcaption class="info-wrap">
+            <h4 class="title"><%= product.name.capitalize %></h4>
+            <h4 class="title">Price: <%= product.price %></h4>
+            <% if current_user.present? && current_user.admin %>
+              <%= link_to "Edit this product",edit_product_path(product), class: "btn btn-xs btn-warning" %>
+              <%= link_to "Delete this product", product_path(product), method: :delete, data: { confirm: "are you sure"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning" %>
+            <% end %>
+            <%= link_to "Add to cart", addcart_path(product_id: product), method: :post, class: "btn btn-xs btn-warning" %>
+          </figcaption>
+        </figure>
+      </div>
     <% end %>
   <% end %>
+  </div>
   <%= will_paginate @products %>
 </div>
