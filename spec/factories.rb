@@ -4,11 +4,8 @@ FactoryBot.define do
     email "phanvanhunglmlm@gmail.com"
     password "password"
     phone "01683853169"
-    phone_ship "01683853169"
     address "497 Hoa Hao,P7,Q10,TP.HCM"
-    address_ship "497 Hoa Hao,P7,Q10,TP.HCM"
     admin false
-    name_ship "hung phan"
   end
 
   factory :product do 
@@ -23,6 +20,9 @@ FactoryBot.define do
   end
 
   factory :payment do 
+    phone_ship "01683853169"
+    name_ship "Hung"
+    address_ship "Tp.HCM"
     response ({ 'PayerID' => 'i049290jfsjf' })
   end
   # category { create(:category) }

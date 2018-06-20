@@ -1,11 +1,7 @@
 module PaymentHelper
   
   def total_money_in_payment(payment)
-    total = 0
-    payment.items.each do |item|
-      total += item.amounts*item.product.price
-    end
-    return total
+    payment.items.inject(0) { |sum,item| sum + (item.amounts*item.product.price) }
   end
 
   def multiplication(price,amount)
@@ -19,10 +15,6 @@ module PaymentHelper
   end
 
   def total_money_in_items(items)
-    total = 0 
-    items.each do |i|
-      total += i.amounts*i.product.price
-    end
-    return total.round(2)
+    items.inject(0) { |total, i| total + i.amounts*i.product.price }
   end
 end

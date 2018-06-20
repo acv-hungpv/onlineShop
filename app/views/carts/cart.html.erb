@@ -38,7 +38,7 @@
           <% end %>
         <% end %>
         </table>
-      <% elsif !session[:cart].blank? %>
+      <% elsif session[:cart].present? %>
         <%= render 'session_cart' %>
       <% else %>
         <p>Did not have products in cart </p>

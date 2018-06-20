@@ -11,7 +11,7 @@ RSpec.describe ProductsController, type: :controller do
       products << Product.create(name: "test product", description:"description test", 
                   price: 10, image: "https://")
       get :index
-      expect(assigns(:products)).to eq  products
+      expect(assigns(:products)) ==  products
     end
   end
 end
