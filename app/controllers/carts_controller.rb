@@ -21,8 +21,8 @@ class CartsController < ApplicationController
     end
   end
 
-  def carts
-
+  def cart
+    @items = Item.includes(:product).where(:user => current_user)
   end
 
   

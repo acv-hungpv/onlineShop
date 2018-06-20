@@ -2,7 +2,7 @@ class PaymentsController < ApplicationController
   include PaymentHelper
   before_action :set_payment, only: [:show]
   def index
-    @payments = Payment.paginate(page: params[:page], per_page: 5)
+    @payments = Payment.includes(:items).paginate(page: params[:page], per_page: 5)
   end
 
   

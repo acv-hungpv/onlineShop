@@ -1,0 +1,28 @@
+= render 'shared/page_title', title: "showing detail product: "
+.col-md-10.col-md-offset-1
+  .row
+    .col-sm-6.border-right
+      .gallery-wrap
+        .img-big-wrap
+          div
+            = image_tag @product.image
+    .col-sm-6
+      h3
+        = @product.name
+      p
+        span.h3.text-warning
+          span
+            = @product.price
+            = @product.currency
+      .item-property
+        dt
+          | Description
+        dd
+          p
+            = @product.description
+        dt
+          | Type
+        dd
+          - @product.categories.each do |c|
+            = c.name
+      = link_to "Add to cart", addcart_path(product_id: @product.id), method: :post, class: "btn btn-lg btn-warning"

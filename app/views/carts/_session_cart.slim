@@ -1,0 +1,33 @@
+table
+  tr
+    td
+      |  IMG
+    td
+      | Product name
+    td
+      | Price 
+    td
+      | Amounts
+    td
+      | Total prices
+    td
+      | Delete
+  - session[:cart].each do |product_id, amounts|
+    - product = find_product(product_id)
+    tr
+      td
+        = image_tag product.image , size: 100
+      td
+        = product.name.capitalize
+      td
+        = (product.price).round(2)
+        = product.currency
+      td
+        = form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f|
+          = f.number_field :amounts, :value => amounts, min: 1,:style => "width:70px;", :class => 'form-control'
+          = f.hidden_field :product_id, :value => product_id
+          = f.submit "change", :class => "btn btn-default btn-primary"
+      td
+        = multiplication(product.price,amounts.to_i)
+      td
+        = link_to "Delete this item", deletecart_path(product_id), method: :delete, data: { confirm: "are you sure delete this item"}, class: "btn btn-xs btn-danger", class: "btn btn-xs btn-warning"

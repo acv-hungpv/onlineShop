@@ -1,0 +1,20 @@
+= render 'shared/page_title', title: "showing all type products"
+div[align="center"]
+  = will_paginate
+  - @categories.each do |category|
+    - if category.products.present?
+      br
+      |  Type: 
+      b
+        = category.name.capitalize
+      p
+        span.quiet
+          small
+            | Created 
+            = time_ago_in_words(category.created_at)
+            |  ago 
+      = link_to "Details products in Category",category_path(category), class: "btn btn-xs btn-warning"
+      p
+        |  Amout products in category: 
+        = category.products.count
+  = will_paginate

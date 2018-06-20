@@ -1,0 +1,32 @@
+= render 'shared/page_title', title: "show details payment"
+.center
+  b
+  h3
+    | Delivery address
+  h4
+    | Name: 
+    = @payment.name_ship
+  h4
+    | Phone: 
+    = @payment.phone_ship
+  h4
+    | Address: 
+    = @payment.address_ship
+  b
+  h3
+    | Items
+  - @payment.items.each do |item|
+    h4
+      | Product name: 
+      = item.product.name
+    = image_tag item.product.image , size: 160
+    h4
+      | product price: 
+      = item.product.price
+    h4
+      | Amount: 
+      = item.amounts
+  h3
+    | Total: 
+    = total_money_in_payment(@payment)
+    |  USD
