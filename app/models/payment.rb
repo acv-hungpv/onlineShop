@@ -1,5 +1,6 @@
 class Payment < ApplicationRecord
   has_many :items
   
-  default_scope { order(created_at: :desc)}
+  validates :phone_ship, :name_ship, :address_ship, presence: true
+  default_scope { order(created_at: :desc) }
 end
