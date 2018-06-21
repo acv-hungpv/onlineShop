@@ -20,17 +20,17 @@ class CartsController < ApplicationController
   end
 
   def cart
-    @items = Item.includes(:product).where(:user => current_user)
+    @items = current_user.items.includes(:product)
   end
   
   def changecart
-    product_id = (params[:cart][:product_id]).to_i
     amounts = params[:cart][:amounts]
     if current_user.present?
-      item = Item.find_by(ispayment: false, product_id: product_id, user_id: current_user.id)
+      item = Item.find(params[:cart][:item_id])
       item.amounts = amounts
       item.save
     else
+      product_id = (params[:cart][:product_id]).to_i
       session[:cart][product_id] = amounts
     end
     redirect_to cart_path

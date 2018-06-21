@@ -22,15 +22,15 @@ div[align="center"]
       - if current_user.present?
         td
           = form_for :cart, url: { :action => 'changecart', :controller => 'carts' } do |f|
-            = f.number_field :amounts,:value => @item.amounts, min: 1,:style => "width:70px;", :class => 'form-control'
-            = f.hidden_field :product_id, :value => @product.id
+            = f.number_field :amounts,:value => @item.amounts, min: 1,:style => "width:70px;",:required => true, :class => 'form-control'
+            = f.hidden_field :item_id, :value => @item.id
             = f.submit  "change", :class => "btn btn-default btn-primary"
         td
           = multiplication(@product.price, @item.amounts)
       - else
         td
           = form_for :cart, url: { :action => 'changecart', :controller => 'carts' } do |f|
-            = f.number_field :amounts, :value => session[:cart][@product.id], min: 1,:style => "width:70px;", :class => 'form-control'
+            = f.number_field :amounts, :value => session[:cart][@product.id], min: 1,:required => true, :style => "width:70px;", :class => 'form-control'
             = f.hidden_field :product_id, :value => @product.id
             = f.submit  'change', :class => "btn btn-default btn-primary"
         td
