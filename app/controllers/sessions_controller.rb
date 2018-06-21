@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       cookies.signed[:user_id] = user.id
       flash[:success] = "you have successfully logged in"
       session[:cart].each do |product_id, amounts|
-        item = find_item_in_addcart(product_id.to_i)
+        item = Item.find_by(product_id: product_id, user_id: user.id, ispayment: false)
         if item.blank?
           current_user.items.build(product_id: product_id, amounts: amounts).save 
         else

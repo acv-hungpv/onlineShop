@@ -36,25 +36,56 @@ RSpec.describe ProductsController, type: :controller do
     end
   end
 
-  describe " #create success" do 
+  describe 'PUT update' do
     let!(:product) { create(:product) }
+    params = { name: "update name", description: "desciption", 
+                                      url: " http://goo", 
+                                      price: 20, 
+                                      currency: "$", 
+                                      image: "https://google" }
 
-    # it "creates a new product" do
-    #   params = { product: { name: product.name, 
-    #                         description: product.description, 
-    #                         price: product.price, 
-    #                         image: product.image } }
-    #   post :create, params => { :product => { :name => product.name, 
-    #                         :description => product.description, 
-    #                         :price => product.price, 
-    #                         :image => product.image } }
-    #   expect(Product.count).to eq(2)
-    # end
+    context "Valid attributes" do
+      it "located the requested @product" do
+        put :update,  params: { id: product.id, product: params }
+        product.reload
+        expect(product.name).to eq "update name"
+        expect(product.price).to eq 20
+      end
 
-    # it "does not save the new product" do 
-    #   expect{
-    #     post :create, { product: attributes_for(:invalid_contact)}
-    #   }.to_not change(Product)
-    # end
+      it "redirects to the products list" do
+        put :update,  params: { id: product.id, product: params }
+        response.should redirect_to products_path
+      end  
+    end
+
+    context "Invalid attributes" do
+      it "doest not change product attributes" do 
+        put :update,  params: { id: product.id, product: { name: "update name", description: nil} }
+        product.reload
+        expect(product.name).not_to eq "update name"
+      end
+
+      it "re-renders the edit method" do
+        put :update,  params: { id: product.id, product: { name: "update name", description: nil} }
+        response.should render_template :edit
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    before :each do
+      @product = create(:product)
+    end
+    
+    it "deletes the contact" do
+      expect{
+        delete :destroy, params: {id: @product.id }      
+      }.to change(Product,:count).by(-1)
+    end
+      
+    it "redirects to products#index" do
+      delete :destroy, params: {id: @product.id }
+      response.should redirect_to products_path
+    end
   end
 end

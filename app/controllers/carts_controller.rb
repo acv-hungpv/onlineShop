@@ -11,27 +11,29 @@ class CartsController < ApplicationController
       end
       @item.save
     else
-      if session[:cart][@product.id].blank?
-        session[:cart][@product.id] = 1
+      if session[:cart][@product.id.to_s].blank?
+        session[:cart][@product.id.to_s] = 1
       else
-        session[:cart][@product.id] = (session[:cart][@product.id]).to_i + 1
+        session[:cart][@product.id.to_s] = (session[:cart][@product.id.to_s]).to_i + 1
       end
     end
   end
 
   def cart
-    @items = current_user.items.includes(:product)
+    if current_user.present?
+      @items = current_user.items.includes(:product)
+    end
   end
   
   def changecart
-    amounts = params[:cart][:amounts]
+    amounts = params[:cart][:amounts].to_i
     if current_user.present?
       item = Item.find(params[:cart][:item_id])
       item.amounts = amounts
       item.save
     else
-      product_id = (params[:cart][:product_id]).to_i
-      session[:cart][product_id] = amounts
+      product_id = (params[:cart][:product_id])
+      session[:cart][product_id.to_s] = amounts
     end
     redirect_to cart_path
   end  
@@ -48,6 +50,5 @@ class CartsController < ApplicationController
       flash.now[:notice] = 'There is an error in your delete item'
       render :new
     end
-
   end
 end

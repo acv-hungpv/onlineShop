@@ -6,7 +6,11 @@ class UsersController < ApplicationController
   end
   
   def new
-    @user = User.new
+    if current_user.blank?
+      @user = User.new
+    else
+      redirect_to root_path
+    end
   end
   
   def create
@@ -14,7 +18,7 @@ class UsersController < ApplicationController
     if @user.save
       session[:user_id] = @user.id
       flash[:success] = "Welcome #{@user.name.capitalize} to onlineShop app!"
-      redirect_to user_path(@user)
+      redirect_to products_path
     else 
       render 'new'
     end
@@ -26,6 +30,7 @@ class UsersController < ApplicationController
   end
   
   def update
+    binding.pry
     if @user.update(user_params)
       flash[:success] = "your account was updated successfully"
       redirect_to users_path
