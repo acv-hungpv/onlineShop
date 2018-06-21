@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
+gem 'rubocop', '~> 0.57.2', require: false
+
 gem 'rails_admin', '~> 1.3'
 
 gem 'paypal-sdk-rest'

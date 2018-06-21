@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
   def update
     return redirect_to products_url, notice: 'you have successfully update product' if @product.update(product_params)
     flash.now[:notice] = 'There is an error in your update product'
-    render :new
+    render :edit
   end
 
   def destroy

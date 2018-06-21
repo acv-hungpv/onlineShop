@@ -4,7 +4,6 @@ class PaymentsController < ApplicationController
   def index
     @payments = Payment.includes(:items).paginate(page: params[:page], per_page: 5)
   end
-
   
   def is_items
     item_ids = params[:item_ids]
@@ -50,7 +49,9 @@ class PaymentsController < ApplicationController
       end
     else
       flash[:danger] = "There was something wrong, please fill in all  "
-      redirect_to new_payment_path
+      @payment = $payment
+      @items = $items_payment
+      render 'new'
     end
   end
 

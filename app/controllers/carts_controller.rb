@@ -1,22 +1,20 @@
 class CartsController < ApplicationController
   include CartHelper
   def addcart
-    @product_id = (params[:product_id]).to_i
-    @item = nil
+    @product = Product.find((params[:product_id]))
     if current_user.present?
-      item = find_item_in_addcart(@product_id)
-      if (item.blank?)
-        item = current_user.items.build(product_id: @product_id, amounts: 1)
+      @item = Item.find_by(ispayment: false, product_id: @product.id, user_id: current_user.id)
+      if (@item.blank?)
+        @item =Item.new(product_id: @product.id, amounts: 1, user: current_user)
       else
-        item.amounts += 1
+        @item.amounts += 1
       end
-      item.save
-      @item = item
+      @item.save
     else
-      if session[:cart][@product_id].blank?
-        session[:cart][@product_id] = 1
+      if session[:cart][@product.id].blank?
+        session[:cart][@product.id] = 1
       else
-        session[:cart][@product_id] = (session[:cart][@product_id]).to_i + 1
+        session[:cart][@product.id] = (session[:cart][@product.id]).to_i + 1
       end
     end
   end
@@ -24,13 +22,12 @@ class CartsController < ApplicationController
   def cart
     @items = Item.includes(:product).where(:user => current_user)
   end
-
   
   def changecart
     product_id = (params[:cart][:product_id]).to_i
     amounts = params[:cart][:amounts]
     if current_user.present?
-      item = find_item_in_addcart(product_id)
+      item = Item.find_by(ispayment: false, product_id: product_id, user_id: current_user.id)
       item.amounts = amounts
       item.save
     else

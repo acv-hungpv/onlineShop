@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       session[:user_id] = user.id
+      cookies.signed[:user_id] = user.id
       flash[:success] = "you have successfully logged in"
       session[:cart].each do |product_id, amounts|
         item = find_item_in_addcart(product_id.to_i)

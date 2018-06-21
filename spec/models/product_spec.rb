@@ -17,6 +17,7 @@ RSpec.describe Product, type: :model do
     let!(:product1) { create(:product) }
     let!(:product2) { create(:product) }
     let!(:product3) { create(:product) }
+    
     it "ordering " do 
       expect(Product.last).to eq product1
       expect(Product.first).to eq product3

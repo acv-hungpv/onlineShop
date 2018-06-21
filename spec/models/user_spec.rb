@@ -20,6 +20,7 @@ RSpec.describe User, type: :model do
 
   context "Custom validate" do
     let!(:user1){ create(:user,email: "HUNGPHan@gmail.com")}
+    
     it "expect set email to lower case" do 
       expect(user1.email).to eq 'hungphan@gmail.com'
     end
