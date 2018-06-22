@@ -15,8 +15,8 @@
         td
           | Time payment
       - @payments.each do |payment|
-        - if current_user == payment.items.first.user
-          - payment.items.each do |item|
+        - if is_valid_to_show_payment_current_user?(payment)
+          - eager_load_payment_items(payment.items).each do |item|
             tr
               td
                 = item.product.name

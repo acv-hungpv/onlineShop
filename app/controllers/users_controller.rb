@@ -26,11 +26,9 @@ class UsersController < ApplicationController
    
   
   def edit
-  
   end
   
   def update
-    binding.pry
     if @user.update(user_params)
       flash[:success] = "your account was updated successfully"
       redirect_to users_path

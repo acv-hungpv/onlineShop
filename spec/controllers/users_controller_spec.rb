@@ -32,11 +32,9 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe '#update' do 
-    user = { name: "hung", email: 'test@gmail.com', phone: '01683853169', address:'Ho Chi Minh',
-              password: '123456', password_confirmation: '123456' }
     context "Valid User" do 
+      let!(:user) { create(:user) }
       it "should valid update user" do 
-        user = create(:user)
         put :update, params: { id: user.id, user: { name:"HungHungupdate",
                                                     email: "testupdate@gmail.com",
                                                     address: user.address,
@@ -49,11 +47,20 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context "Invalid User" do 
+      let!(:user) { create(:user) }
       it "Invalid update user" do 
-        user = create(:user)
         put :update, params: { id: user.id, user: { email: nil } }
         response.should render_template :edit
       end
+    end
+  end
+
+  describe '#edit' do
+    let!(:user) { create(:user) }
+    it "get edit" do 
+      get :edit, params: { id: user.id }
+      expect(response).to render_template :edit
+      expect(assigns(:user)).to eq user
     end
   end
 end

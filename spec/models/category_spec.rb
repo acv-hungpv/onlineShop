@@ -10,9 +10,9 @@ RSpec.describe Category, type: :model do
   end
 
   context "Custom validate" do 
-    let!(:category1) { create(:category, name:"category1") }
-    let!(:category2) { create(:category, name:"category2") }
-    let!(:category3) { create(:category, name:"category3") }
+    let!(:category1) { create(:category) }
+    let!(:category2) { create(:category) }
+    let!(:category3) { create(:category) }
     it "ordering" do 
       expect(Category.last).to eq category1
       expect(Category.first).to eq category3

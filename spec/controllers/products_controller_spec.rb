@@ -2,35 +2,29 @@ require 'rails_helper'
 
 RSpec.describe ProductsController, type: :controller do
   describe '#index' do 
+    let!(:product_list) { create_list(:product, 4) }
     it 'get a list products' do 
-      products = []
-      products << Product.create(name: "test product", description:"description test", 
-                  price: 10, image: "https://")
-      products << Product.create(name: "test product", description:"description test", 
-                  price: 10, image: "https://")
-      products << Product.create(name: "test product", description:"description test", 
-                  price: 10, image: "https://")
       get :index
-      expect(assigns(:products)).to eq products.reverse
+      expect(assigns(:products)).to eq product_list.reverse
     end
   end
 
   describe "GET #show" do
+    let!(:product) { create(:product) }
     it "assigns the requested product to @product" do
-      product_show = create(:product)
-      get :show, params: {id: product_show.id }
-      assigns(:product).should eq(product_show)
+      get :show, params: { id: product.id }
+      assigns(:product).should eq(product)
     end
     it "renders the #show view" do
-      get :show, params: {id: create(:product).id}
+      get :show, params: { id: product.id }
       response.should render_template :show
     end
   end
 
   describe "#edit " do 
+    let!(:product) { create(:product) }
     it " render edit" do 
-      product = create(:product)
-      get :edit, params: {id: product.id}
+      get :edit, params: { id: product.id }
       expect(response).to render_template :edit
       expect(assigns(:product)).to eq product
     end
@@ -78,13 +72,13 @@ RSpec.describe ProductsController, type: :controller do
     end
     
     it "deletes the contact" do
-      expect{
-        delete :destroy, params: {id: @product.id }      
+      expect {
+        delete :destroy, params: { id: @product.id }      
       }.to change(Product,:count).by(-1)
     end
       
     it "redirects to products#index" do
-      delete :destroy, params: {id: @product.id }
+      delete :destroy, params: { id: @product.id }
       response.should redirect_to products_path
     end
   end

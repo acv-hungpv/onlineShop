@@ -1,6 +1,5 @@
 class PaymentsController < ApplicationController
   include PaymentHelper
-  before_action :set_payment, only: [:show]
   def index
     @payments = Payment.includes(:items).paginate(page: params[:page], per_page: 5)
   end
@@ -45,9 +44,11 @@ class PaymentsController < ApplicationController
         redirect_url = @payment.links.find {|link| link.rel == 'approval_url'}
         redirect_to redirect_url.href
       else
+        $payment.destroy
         redirect_to root_url, notice: @payment.error
       end
     else
+      $payment.destroy
       flash[:danger] = "There was something wrong, please fill in all  "
       @payment = $payment
       @items = $items_payment
@@ -72,6 +73,7 @@ class PaymentsController < ApplicationController
       end
       $payment.save
     else
+      $payment.destroy
       payment.error # Error Hash
       flash[:danger] = "There was something wrong"
     end
@@ -79,14 +81,11 @@ class PaymentsController < ApplicationController
   end
 
   def show
-
+    @payment = Payment.find(params[:id])
+    @items = @payment.items.includes(:product)
   end
 
   private
-
-  def set_payment
-    @payment = Payment.find(params[:id])
-  end
 
   def payment_params
     params.require(:payment).permit(:name_ship, :phone_ship, :address_ship)
