@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CartsController, type: :controller do
   let!(:product) { create(:product) }
+
   context "Does not login" do 
     describe 'get list cart' do 
       it 'render cart view' do 
@@ -21,8 +22,9 @@ RSpec.describe CartsController, type: :controller do
     describe '#change' do 
       it 'should change amouts item in cart' do
         session[:cart] = {}
-        post :addcart, params: { product_id: product.id }
-        post :changecart, params: { cart: { amounts: 20, product_id: product.id } }
+        session[:cart][product.id.to_s] = 5
+        post :changecart, params: { cart: { amounts: 20, 
+                                            product_id: product.id } }
         expect(session[:cart][product.id.to_s]).to eq (20)
       end
     end
@@ -30,6 +32,7 @@ RSpec.describe CartsController, type: :controller do
  
   context "Logined" do 
     let!(:user) { create(:user) }
+
     before :each do
       session[:user_id] = user.id
     end
@@ -42,7 +45,8 @@ RSpec.describe CartsController, type: :controller do
       end
 
       it 'addcart which item in cart' do 
-        item_before = Item.create(amounts: 3, user: user, product: product, ispayment: false)      
+        item_before = Item.create(amounts: 3, user: user, 
+                                  product: product, ispayment: false)      
         post :addcart, params: { product_id: product.id }
         item_after_addcart = Item.find(item_before.id)
         expect(item_after_addcart.amounts).to eq(4)
@@ -52,8 +56,10 @@ RSpec.describe CartsController, type: :controller do
     describe '#change' do 
       it 'should change amouts item in cart' do
         amounts_change = 20
-        item_before = Item.create(amounts: 3, user: user, product: product, ispayment: false) 
-        post :changecart, params: { cart: { amounts: amounts_change, item_id: item_before.id} }
+        item_before = Item.create(amounts: 3, user: user, 
+                                            product: product, ispayment: false) 
+        post :changecart, params: { cart: { amounts: amounts_change, 
+                                            item_id: item_before.id } }
         item_after_addcart = Item.find(item_before.id)
         expect(item_after_addcart.amounts).to eq (amounts_change)
       end

@@ -34,7 +34,7 @@ User.create(name: "user", email:"hungphan@gmail.com", password: "password",
 
 webhoseio = Webhoseio.new('344a242c-e0fc-4475-9b1d-6d1beb587589')
 query_params = {
-'q': "category:fashion category:womens-clothing"
+'q': "category:womens-clothing"
 }
 output = webhoseio.query('productFilter', query_params)
 numOutput = output['products'].count
@@ -45,17 +45,6 @@ for i in 0..numOutput-1
   end 
 end
 category_names = category_names.uniq
-
-# values = ""
-# for i in 0..category_names.count-1
-#   if i == (category_names.count-1)
-#     values += "(#{i+1},'#{category_names[i]}') "
-#   else
-#     values += "(#{i+1},'#{category_names[i]}'), "
-#   end
-# end
-# puts values
-# ApplicationRecord.connection.exec_query("INSERT INTO categories (id, name) VALUES #{values}")
 
 category_names.each do |name_had_created|
   category_row = Category.create!(name: name_had_created)

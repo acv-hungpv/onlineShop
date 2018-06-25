@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   describe '#create' do 
-    user = { name: "hung", email: 'test@gmail.com', phone: '01683853169', address:'Ho Chi Minh',
+    user = { name: "hung", email: 'test@gmail.com', 
+              phone: '01683853169', address:'Ho Chi Minh',
               password: '123456', password_confirmation: '123456' }
     context "Valid User" do 
       it "should valid create user" do 
-        expect{
+        expect {
           post :create, params: { user: user }
         }.to change(User, :count).by(1)
       end
@@ -19,13 +20,14 @@ RSpec.describe UsersController, type: :controller do
 
     context "Invalid User" do 
       it "Invalid create user" do 
-        expect{
+        expect {
           post :create, params: { user: { name: "hung", email: ""} }
         }.to change(User, :count).by(0)
       end
 
       it "Invalid user render new" do
-        post :create, params: { user: { name: "hung", email: "hung@gmail.com", password: "123" } }
+        post :create, params: { user: { name: "hung", email: "hung@gmail.com", 
+                                        password: "123" } }
         response.should render_template :new
       end        
     end
@@ -34,6 +36,7 @@ RSpec.describe UsersController, type: :controller do
   describe '#update' do 
     context "Valid User" do 
       let!(:user) { create(:user) }
+
       it "should valid update user" do 
         put :update, params: { id: user.id, user: { name:"HungHungupdate",
                                                     email: "testupdate@gmail.com",
@@ -48,6 +51,7 @@ RSpec.describe UsersController, type: :controller do
 
     context "Invalid User" do 
       let!(:user) { create(:user) }
+
       it "Invalid update user" do 
         put :update, params: { id: user.id, user: { email: nil } }
         response.should render_template :edit

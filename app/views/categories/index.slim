@@ -13,7 +13,7 @@ div[align="center"]
             | Created 
             = time_ago_in_words(category.created_at)
             |  ago 
-      = link_to "Details products in Category",category_path(category), class: "btn btn-xs btn-warning"
+      = link_to "Details products in Category",category_path(category), class: "btn btn-sm btn-info"
       p
         |  Amout products in category: 
         = category.products.count

@@ -1,28 +1,33 @@
 class CartsController < ApplicationController
   include CartHelper
+
   def addcart
     @product = Product.find((params[:product_id]))
     if current_user.present?
       @item = Item.find_by(ispayment: false, product_id: @product.id, user_id: current_user.id)
-      if (@item.blank?)
-        @item =Item.new(product_id: @product.id, amounts: 1, user: current_user)
-      else
-        @item.amounts += 1
-      end
+      return @item =Item.create(product_id: @product.id, amounts: 1, user: current_user) if (@item.blank?)
+      @item.amounts += 1
       @item.save
     else
-      if session[:cart][@product.id.to_s].blank?
-        session[:cart][@product.id.to_s] = 1
-      else
-        session[:cart][@product.id.to_s] = (session[:cart][@product.id.to_s]).to_i + 1
-      end
+      return session[:cart][@product.id.to_s] = 1 if session[:cart][@product.id.to_s].blank?
+      session[:cart][@product.id.to_s] += + 1
     end
   end
 
   def cart
+    if session[:payment_id] != nil
+      Payment.find(session[:payment_id]).destroy
+      session[:payment_id] = nil
+    end
     if current_user.present?
       @items = current_user.items.includes(:product)
     end
+  end
+
+  def select_item_to_payment
+    if current_user.present?
+      @items = current_user.items.includes(:product)
+    end    
   end
   
   def changecart
@@ -33,7 +38,7 @@ class CartsController < ApplicationController
       item.save
     else
       product_id = (params[:cart][:product_id])
-      session[:cart][product_id.to_s] = amounts
+      session[:cart][product_id] = amounts
     end
     redirect_to cart_path
   end  

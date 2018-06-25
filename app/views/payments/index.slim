@@ -30,8 +30,8 @@
                 = time_ago_in_words(payment.created_at)
                 |  ago
           tr
-            td.center
-              = link_to "Details payment",payment_path(payment), class: "btn btn-xs btn-warning"
+            td
+              = link_to "Details payment",payment_path(payment), class: "btn btn-sm btn-info"
     = will_paginate @payments
 - else
   .center

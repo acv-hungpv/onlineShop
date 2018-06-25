@@ -7,6 +7,8 @@ RSpec.describe Payment, type: :model do
   context "Validate" do 
     it { should validate_presence_of(:name_ship) }
     it { should validate_presence_of(:phone_ship) }
+    it { should validate_length_of(:phone_ship).is_at_least(10) }
+    it { should validate_length_of(:phone_ship).is_at_most(15) }    
     it { should validate_presence_of(:address_ship) }
   end
 

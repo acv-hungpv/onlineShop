@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe ProductsController, type: :controller do
   describe '#index' do 
     let!(:product_list) { create_list(:product, 4) }
+
     it 'get a list products' do 
       get :index
       expect(assigns(:products)).to eq product_list.reverse
@@ -11,10 +12,12 @@ RSpec.describe ProductsController, type: :controller do
 
   describe "GET #show" do
     let!(:product) { create(:product) }
+
     it "assigns the requested product to @product" do
       get :show, params: { id: product.id }
       assigns(:product).should eq(product)
     end
+
     it "renders the #show view" do
       get :show, params: { id: product.id }
       response.should render_template :show
@@ -23,6 +26,7 @@ RSpec.describe ProductsController, type: :controller do
 
   describe "#edit " do 
     let!(:product) { create(:product) }
+
     it " render edit" do 
       get :edit, params: { id: product.id }
       expect(response).to render_template :edit
@@ -32,6 +36,7 @@ RSpec.describe ProductsController, type: :controller do
 
   describe 'PUT update' do
     let!(:product) { create(:product) }
+
     params = { name: "update name", description: "desciption", 
                                       url: " http://goo", 
                                       price: 20, 
@@ -54,13 +59,15 @@ RSpec.describe ProductsController, type: :controller do
 
     context "Invalid attributes" do
       it "doest not change product attributes" do 
-        put :update,  params: { id: product.id, product: { name: "update name", description: nil} }
+        put :update,  params: { id: product.id, product: { name: "update name", 
+                                                            description: nil } }
         product.reload
         expect(product.name).not_to eq "update name"
       end
 
       it "re-renders the edit method" do
-        put :update,  params: { id: product.id, product: { name: "update name", description: nil} }
+        put :update,  params: { id: product.id, product: { name: "update name", 
+                                                            description: nil } }
         response.should render_template :edit
       end
     end

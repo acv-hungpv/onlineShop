@@ -6,6 +6,8 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:email)}
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:phone) }
+    it { should validate_length_of(:phone).is_at_least(10) }
+    it { should validate_length_of(:phone).is_at_most(15) }    
     it { should validate_presence_of(:address) }
     it { should validate_presence_of(:password) }
     it { should validate_length_of(:password).is_at_least(5) }

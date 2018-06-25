@@ -1,10 +1,10 @@
 module PaymentHelper
   
   def total_money_in_payment(payment)
-    payment.items.includes(:product).inject(0) { |sum,item| sum += (item.amounts*item.product.price) }.round(2)
+    payment.items.includes(:product).inject(0) { |sum, item| sum += (item.amounts*item.product.price) }.round(2)
   end
 
-  def multiplication(price,amount)
+  def multiplication(price, amount)
     return (price*amount).round(2)
   end
 
@@ -25,5 +25,9 @@ module PaymentHelper
 
   def eager_load_payment_items(items)
     return items.includes(:product)
+  end
+
+  def find_items_payment
+    return Item.where(id: session[:items_payment_id])
   end
 end

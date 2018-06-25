@@ -14,7 +14,7 @@
     .control-label.col-md-2
       = f.label :phone_ship
     .col-md-8
-      = f.text_field :phone_ship, :value => current_user.phone, class: "form-control", placeholder: "Enter your phone"
+      = f.telephone_field :phone_ship, :value => current_user.phone, class: "form-control", placeholder: "Enter your phone"
   .form-group
     .col-md-offset-2.col-md-10
       = f.submit "Payment", class: "btn btn-primary btn-xlarge"

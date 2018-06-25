@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do 
     name "HungPhan"
-    email "phanvanhunglmlm@gmail.com"
+    email { [*('A'..'Z')].sample(8).join + "@gmail.com" }
     password "password"
     password_confirmation "password"
     phone "01683853169"

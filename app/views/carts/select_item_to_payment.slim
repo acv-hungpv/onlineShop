@@ -1,0 +1,35 @@
+= render 'shared/page_title', title: "Please select items to payment"
+div[align="center"]
+  = form_tag url_for(:controller => 'payments', :action => 'is_items_to_payment'), :method => 'post' do
+    table.carts
+      - if current_user.present? && is_item_to_show_content_in_cart?
+        tr
+          th
+            |  img
+          th
+            | product name
+          th
+            | price 
+          th
+            | amounts
+          th
+            | total prices
+          th
+            | select
+        - @items.each do |item|
+          - if !item.ispayment
+            tr
+              td
+                = image_tag item.product.image , size: 100
+              td
+                = item.product.name.capitalize
+              td
+                = (item.product.price).round(2)
+                = item.product.currency
+              td
+                = item.amounts
+              td
+                = multiplication(item.product.price, item.amounts)
+              td
+                = check_box_tag 'items_payment_id[]', item.id
+    = submit_tag 'Select and Go to payment', :class => "btn btn-success btn-lg"

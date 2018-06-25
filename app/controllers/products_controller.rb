@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  
   def index
     session[:cart] ||= {}
     @products = Product.paginate(page: params[:page], per_page: 15)
@@ -15,13 +16,13 @@ class ProductsController < ApplicationController
 
   def update
     return redirect_to products_url, notice: 'you have successfully update product' if @product.update(product_params)
-    flash.now[:notice] = 'There is an error in your update product'
+    flash[:danger] = 'There is an error in your update product'
     render :edit
   end
 
   def destroy
     return redirect_to products_url, notice: 'you have successfully delete product' if @product.destroy
-    flash.now[:notice] = 'There is an error in your delete product'
+    flash[:danger] = 'There is an error in your delete product'
     render :new
   end 
 

@@ -22,11 +22,12 @@ Rails.application.routes.draw do
   post 'changecart', to: 'carts#changecart'
   get 'cart', to: 'carts#cart'
   delete 'deletecart', to: 'carts#deletecart'
+  get 'select_item_to_payment', to: 'carts#select_item_to_payment'
 
   resources :payments, only: [:new, :index, :create, :show] do 
     collection do 
       get :success
-      post :is_items
+      post :is_items_to_payment
       get :details
     end
   end

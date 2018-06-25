@@ -1,51 +1,44 @@
 = render 'shared/page_title', title: "list all products in cart"
 div[align="center"]
-  = form_tag url_for(:controller => 'payments', :action => 'is_items'), :method => 'post' do
-    table
-      - if current_user.present? && is_item_to_show_content_in_cart?
-        tr
-          td
-            |  IMG
-          td
-            | Product name
-          td
-            | Price 
-          td
-            | Amounts
-          td
-            | Total prices
-          td
-            | Delete
-          td
-            | SelectPayment 
-            = form_for :cart, url: { :action => 'changecart', :controller => 'carts' } do |f|
-
-        - @items.each do |item|
-          - if !item.ispayment
-            tr
-              td
-                = image_tag item.product.image , size: 100
-              td
-                = item.product.name.capitalize
-              td
-                = (item.product.price).round(2)
-                = item.product.currency
-              td
-                = form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f|
-                  = f.number_field :amounts, :value => item.amounts, :required => true, min: 1,:style => "width:70px;", :class => 'form-control'
-                  = f.hidden_field :item_id, :value => item.id
-                  = f.submit  "change", :class => "btn btn-default btn-primary"
-              td
-                = multiplication(item.product.price, item.amounts)
-              td
-                = link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, :class => "btn btn-xs btn-danger"
-              td
-                = check_box_tag 'item_ids[]', item.id
-      - elsif session[:cart].present?
-        = render 'session_cart'
-      - else
-        p
-          | Did not have products in cart 
+  table
     - if current_user.present? && is_item_to_show_content_in_cart?
-      div
-        = submit_tag 'Payment', :class => "btn btn-success btn-lg"
+      tr
+        td
+          |  IMG
+        td
+          | Product name
+        td
+          | Price 
+        td
+          | Amounts
+        td
+          | Total prices
+        td
+          | Delete
+      - @items.each do |item|
+        - if !item.ispayment
+          tr
+            td
+              = image_tag item.product.image , size: 100
+            td
+              = item.product.name.capitalize
+            td
+              = (item.product.price).round(2)
+              = item.product.currency
+            td
+              = form_for :cart, url: {:action => 'changecart', :controller => 'carts'} do |f|
+                = f.number_field :amounts, :value => item.amounts, :required => true, min: 1,:style => "width:70px;", :class => 'form-control'
+                = f.hidden_field :item_id, :value => item.id
+                = f.submit  "change", :class => "btn btn-default btn-primary"
+            td
+              = multiplication(item.product.price, item.amounts)
+            td
+              = link_to "Delete this item", deletecart_path(item.id), method: :delete, data: { confirm: "are you sure delete this item"}, :class => "btn btn-sm btn-danger"
+    - elsif session[:cart].present?
+      = render 'session_cart'
+    - else
+      p
+        | Did not have products in cart 
+  - if current_user.present? && is_item_to_show_content_in_cart?
+    div
+      = link_to 'Go to payment', select_item_to_payment_path, :class => "btn btn-success btn-lg"

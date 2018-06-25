@@ -1,34 +1,37 @@
 class PaymentsController < ApplicationController
   include PaymentHelper
+
   def index
-    @payments = Payment.includes(:items).paginate(page: params[:page], per_page: 5)
+    @payments = Payment.paginate(page: params[:page], per_page: 10)
   end
   
-  def is_items
-    item_ids = params[:item_ids]
-    if item_ids.blank?
-      flash[:danger] = "please select items to payment"
-      redirect_to cart_path
+  def is_items_to_payment
+    items_payment_id = params[:items_payment_id]
+    if items_payment_id.blank?
+      flash[:danger] = 'Please select items to payment'
+      redirect_to select_item_to_payment_path
     else 
-      $items_payment = Item.where(id: item_ids)
+      session[:items_payment_id] = []
+      session[:items_payment_id] = params[:items_payment_id]
       redirect_to new_payment_path
     end
   end
 
   def new
-    @items = $items_payment
+    @items = find_items_payment
     @payment = Payment.new
   end
 
   def create
-    $payment = Payment.new(payment_params)
-    if $payment.save
+    @payment = Payment.new(payment_params)
+    if @payment.save
+      session[:payment_id] = @payment.id
       totals = 0
-      $items_payment.each do |item|
+      find_items_payment.each do |item|
         product = item.product
         totals += (product.price)*(item.amounts)
       end
-      @payment = PayPal::SDK::REST::Payment.new({
+      @payment_paypal = PayPal::SDK::REST::Payment.new({
         intent: "sale",
         payer: {
           payment_method: "paypal" },
@@ -40,44 +43,40 @@ class PaymentsController < ApplicationController
             total: totals.round(2),
             currency: "USD" },
           description: "Payment" } ] } )
-      if @payment.create
-        redirect_url = @payment.links.find {|link| link.rel == 'approval_url'}
+      if @payment_paypal.create
+        redirect_url = @payment_paypal.links.find { |link| link.rel == 'approval_url' }
         redirect_to redirect_url.href
       else
-        $payment.destroy
-        redirect_to root_url, notice: @payment.error
+        flash[:danger] = @payment_paypal.error
+        redirect_to root_url
       end
     else
-      $payment.destroy
-      flash[:danger] = "There was something wrong, please fill in all  "
-      @payment = $payment
-      @items = $items_payment
+      flash[:danger] = 'There was something wrong, please fill in all'
+      @items = find_items_payment
       render 'new'
     end
   end
 
-  # GET /success
   def success
-    payment = PayPal::SDK::REST::Payment.find(params[:paymentId])
-    if payment.execute( :payer_id => params[:PayerID] )
-      flash[:success] = "Successfully payment"
-      response = {}
-      response[:paymentId] = params[:paymentId]
-      response[:token] = params[:token]
-      response[:PayerID] = params[:PayerID]
-      $payment.response =  response
-      $items_payment.each do |item|
+    payment_paypal = PayPal::SDK::REST::Payment.find(params[:paymentId])
+    payment = Payment.find(session[:payment_id])
+    if payment_paypal.execute( :payer_id => params[:PayerID] )
+      flash[:success] = "Successful payment"
+      response = { paymentId: params[:paymentId], token: params[:token], PayerID: params[:PayerID] }
+      payment.response =  response
+      find_items_payment.each do |item|
         item.ispayment = true
         item.save
-        $payment.items << item
+        payment.items << item
       end
-      $payment.save
+      payment.save
+      session[:payment_id] = nil
+      redirect_to payment_path(payment)
     else
-      $payment.destroy
-      payment.error # Error Hash
-      flash[:danger] = "There was something wrong"
+      payment.destroy
+      flash[:danger] = "There was something wrong" + payment_paypal.error
+      redirect_to cart_path
     end
-    redirect_to payment_path($payment)
   end
 
   def show
