@@ -10,7 +10,7 @@ class CartsController < ApplicationController
       @item.save
     else
       return session[:cart][@product.id.to_s] = 1 if session[:cart][@product.id.to_s].blank?
-      session[:cart][@product.id.to_s] += + 1
+      session[:cart][@product.id.to_s] +=  1
     end
   end
 

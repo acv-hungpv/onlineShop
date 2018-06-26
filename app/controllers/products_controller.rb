@@ -21,7 +21,7 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    return redirect_to products_url, notice: 'you have successfully delete product' if @product.destroy
+    return redirect_back(fallback_location: products_path), notice: 'you have successfully delete product' if @product.destroy
     flash[:danger] = 'There is an error in your delete product'
     render :new
   end 

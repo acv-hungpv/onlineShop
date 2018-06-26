@@ -28,6 +28,16 @@ RSpec.describe CartsController, type: :controller do
         expect(session[:cart][product.id.to_s]).to eq (20)
       end
     end
+
+    describe '#delete' do 
+      it 'should delete item in cart' do 
+        session[:cart] = {}
+        session[:cart][product.id.to_s] = 5
+        expect {
+          delete :deletecart, params: { format: product.id }
+        }.to change { session[:cart].count }.by(-1)
+      end
+    end 
   end
  
   context "Logined" do 
@@ -41,7 +51,7 @@ RSpec.describe CartsController, type: :controller do
       it 'addcart which item not in cart' do 
         expect {
           post :addcart, params: { product_id: product.id }
-        }.to change{ Item.count }.by(1)
+        }.to change { Item.count }.by(1)
       end
 
       it 'addcart which item in cart' do 
@@ -64,5 +74,14 @@ RSpec.describe CartsController, type: :controller do
         expect(item_after_addcart.amounts).to eq (amounts_change)
       end
     end 
+
+    describe '#delete' do 
+      it 'should delete item in cart' do 
+        item = Item.create(amounts: 3, user: user, product: product)
+        expect {
+          delete :deletecart, params: { format: item.id }
+        }.to change { Item.count }.by(-1)
+      end
+    end
   end
 end

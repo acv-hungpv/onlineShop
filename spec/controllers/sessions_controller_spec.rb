@@ -18,5 +18,15 @@ RSpec.describe SessionsController, type: :controller do
       end
     end
   end
+ 
+  describe '#destroy' do 
+    it 'should redirect to root_path when logged out' do 
+      user = create(:user)
+      session[:user_id] = user.id
+      delete :destroy
+      expect(session[:user_id]).to eq (nil)
+      response.should redirect_to root_path
+    end
+  end 
 
 end
