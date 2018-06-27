@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  
   def index 
-    #@users = User.all
     @users = User.paginate(page: params[:page], per_page: 5)
   end
   
@@ -14,21 +14,21 @@ class UsersController < ApplicationController
     if @user.save
       session[:user_id] = @user.id
       flash[:success] = "Welcome #{@user.name.capitalize} to onlineShop app!"
-      redirect_to user_path(@user)
+      redirect_to products_path
     else 
+      flash[:danger] = "There was something wrong"
       render 'new'
     end
   end
-   
   
   def edit
-  
+
   end
   
   def update
     if @user.update(user_params)
       flash[:success] = "your account was updated successfully"
-      redirect_to @user
+      redirect_to users_path
     else
       render 'edit'
     end
@@ -38,7 +38,6 @@ class UsersController < ApplicationController
 
   end
 
-
   def forgot_password
     if request.post?
       @user = User.find_by(email: params[:user][:email])
@@ -47,7 +46,7 @@ class UsersController < ApplicationController
         flash[:success] = "send email successful"
         redirect_to login_path
       else
-        flash[:notice] = "Email not exist"
+        flash[:danger] = "Email not exist"
         redirect_to forgot_password_users_path
       end
     end
@@ -56,14 +55,15 @@ class UsersController < ApplicationController
 
   def edit_password_reset
     if request.post?
-      user = User.find(params[:edit_password_reset][:user_id])
-      user.password = params[:edit_password_reset][:password]
-      if user.save
-        flash[:success] = "Change password success"
+      @user = User.find(params[:edit_password_reset][:user_id])
+      @user.password = params[:edit_password_reset][:password]
+      @user.password_confirmation = params[:edit_password_reset][:password_confirmation]
+      if @user.save
+        flash[:success] = "Change password successfully"
         redirect_to login_path
       else
-        flash[:notice] = "There was something wrong"
-        redirect_to edit_password_reset_users_path
+        flash[:danger] = "There was something wrong"
+        redirect_to edit_password_reset_users_path(params[:edit_password_reset][:user_id])
       end
     end
   end

@@ -11,10 +11,10 @@ Rails.application.routes.draw do
 
   resources :users, except: [:new] do 
     collection do 
-      post 'forgot_password'
-      get 'forgot_password'
-      get 'edit_password_reset'
-      post 'edit_password_reset'
+      post :forgot_password
+      get :forgot_password
+      get :edit_password_reset
+      post :edit_password_reset
     end
   end
 
@@ -22,15 +22,13 @@ Rails.application.routes.draw do
   post 'changecart', to: 'carts#changecart'
   get 'cart', to: 'carts#cart'
   delete 'deletecart', to: 'carts#deletecart'
+  get 'select_item_to_payment', to: 'carts#select_item_to_payment'
 
-  resources :payments, only: [:index, :create, :show] do 
+  resources :payments, only: [:new, :index, :create, :show] do 
     collection do 
-      get 'success'
-      post 'is_items'
-      get 'ship_infomation'
-      post 'ship_infomation'
-      get 'details'
-
+      get :success
+      post :is_items_to_payment
+      get :details
     end
   end
 

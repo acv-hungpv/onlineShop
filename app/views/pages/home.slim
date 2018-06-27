@@ -1,0 +1,8 @@
+.jumbotron.center
+  h1
+    | Welcome to ShopOnline
+  h2
+    | The best shop in the word!
+  - if current_user.blank?
+    p
+      = link_to "sign up for the app", signup_path, class: "btn btn-danger btn-lg btn-xlarge"

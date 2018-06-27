@@ -1,0 +1,21 @@
+= render 'shared/page_title', title: "Log in"
+= form_for(:session, :html  => { class: "form-horizontal",role: "form"}, url: login_path) do |f|
+  .form-group
+    .control-label.col-md-2
+      = f.label :email
+    .col-md-8
+      =f.email_field :email,rows:10, class: "form-control", placeholder: "Enter your email"
+  .form-group
+    .control-label.col-md-2
+      = f.label :password
+    .col-md-8
+      = f.password_field :password,rows:10, class: "form-control", placeholder: "Enter your password "
+  .form-group
+    .col-md-offset-2.col-md-10
+      = f.submit "Log in", class: "btn btn-primary btn-xlarge"
+.center
+  = link_to "Forgot password", forgot_password_users_path
+  br
+  |  [
+  = link_to "Don't have an account? sign up now!", signup_path
+  | ] 

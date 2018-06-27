@@ -24,17 +24,17 @@ table.each do |t|
   )
 end
 
-User.create(name: "admin", email:"phanvanhunglmlm@gmail.com",password: "password",
-          phone: "01683853169",phone_ship: "01683853169",
-          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: true, name_ship: "hung phan")
-User.create(name: "user", email:"hungphan@gmail.com",password: "password", 
-          phone: "01683853169",phone_ship: "01683853169",
-          address:"497 Hoa Hao,P7,Q10,TP.HCM",address_ship:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false, name_ship: "hung phan")
+User.create(name: "admin", email:"phanvanhunglmlm@gmail.com", password: "password",
+          phone: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM", admin: true)
+User.create(name: "user", email:"hungphan@gmail.com", password: "password", 
+          phone: "01683853169",
+          address:"497 Hoa Hao,P7,Q10,TP.HCM", admin: false)
 
 
 webhoseio = Webhoseio.new('344a242c-e0fc-4475-9b1d-6d1beb587589')
 query_params = {
-'q': "category:fashion category:womens-clothing"
+'q': "category:womens-clothing"
 }
 output = webhoseio.query('productFilter', query_params)
 numOutput = output['products'].count
@@ -46,21 +46,10 @@ for i in 0..numOutput-1
 end
 category_names = category_names.uniq
 
-# values = ""
-# for i in 0..category_names.count-1
-#   if i == (category_names.count-1)
-#     values += "(#{i+1},'#{category_names[i]}') "
-#   else
-#     values += "(#{i+1},'#{category_names[i]}'), "
-#   end
-# end
-# puts values
-# ApplicationRecord.connection.exec_query("INSERT INTO categories (id, name) VALUES #{values}")
-
 category_names.each do |name_had_created|
   category_row = Category.create!(name: name_had_created)
   for i in 0..numOutput-1
-    if  output['products'][i] != nil
+    if  output['products'][i] != nil && output['products'][i]['images'][0] != nil
       output['products'][i]['categories'].each do |category|
         if category == name_had_created
           product = Product.create(name: output['products'][i]['name'],

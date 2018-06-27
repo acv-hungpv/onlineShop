@@ -1,0 +1,40 @@
+= render 'shared/errors', obj: @payment
+= form_for(@payment,:html  => { class: "form-horizontal",role: "form" }) do |f|
+  .form-group
+    .control-label.col-md-2
+      = f.label :name_ship
+    .col-md-8
+      = f.text_field :name_ship, :value => current_user.name, class: "form-control", placeholder: "Enter your name"
+  .form-group
+    .control-label.col-md-2
+      = f.label :address_ship
+    .col-md-8
+      = f.text_field :address_ship, :value => current_user.address, class: "form-control", placeholder: "Enter your address"
+  .form-group
+    .control-label.col-md-2
+      = f.label :phone_ship
+    .col-md-8
+      = f.telephone_field :phone_ship, :value => current_user.phone, class: "form-control", placeholder: "Enter your phone"
+  .form-group
+    .col-md-offset-2.col-md-10
+      = f.submit "Payment", class: "btn btn-primary btn-xlarge"
+.center
+  h2
+    | Total: 
+    = total_money_in_items(@items)
+    |  USD
+  h3
+    | Detail items payment
+  b
+    | Items
+  - @items.each do |item|
+    p
+      | Name product: 
+      = item.product.name
+    = image_tag item.product.image , size: 160
+    p
+      | Price: 
+      = item.product.price
+    p
+      | Amount: 
+      = item.amounts

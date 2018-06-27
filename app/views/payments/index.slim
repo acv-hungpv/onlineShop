@@ -1,0 +1,39 @@
+= render 'shared/page_title', title: "list all payment history"
+- if current_user.present? && ispayment?
+  div[align="center"]
+    = will_paginate @payments
+    table
+      tr
+        td
+          | Name product
+        td
+          | Price
+        td
+          | Amounts
+        td
+          | Total
+        td
+          | Time payment
+      - @payments.each do |payment|
+        - if is_valid_to_show_payment_current_user?(payment)
+          - eager_load_payment_items(payment.items).each do |item|
+            tr
+              td
+                = item.product.name
+              td
+                = item.product.price
+              td
+                = item.amounts
+              td
+                = multiplication(item.product.price,item.amounts)
+              td
+                = time_ago_in_words(payment.created_at)
+                |  ago
+          tr
+            td
+              = link_to "Details payment",payment_path(payment), class: "btn btn-sm btn-info"
+    = will_paginate @payments
+- else
+  .center
+    p
+      | Did not have any payment

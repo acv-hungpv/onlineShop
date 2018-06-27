@@ -1,5 +1,7 @@
 {
   "name": "onlineShop",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "awesome-bootstrap-checkbox": "^0.3.7"
+  }
 }

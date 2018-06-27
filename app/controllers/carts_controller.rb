@@ -1,39 +1,43 @@
 class CartsController < ApplicationController
   include CartHelper
+
   def addcart
-    @product_id = (params[:product_id]).to_i
-    @item = nil
+    @product = Product.find((params[:product_id]))
     if current_user.present?
-      item = find_item_in_addcart(@product_id)
-      if (item.blank?)
-        item = current_user.items.build(product_id: @product_id, amounts: 1)
-      else
-        item.amounts += 1
-      end
-      item.save
-      @item = item
+      @item = Item.find_by(ispayment: false, product_id: @product.id, user_id: current_user.id)
+      return @item =Item.create(product_id: @product.id, amounts: 1, user: current_user) if (@item.blank?)
+      @item.amounts += 1
+      @item.save
     else
-      if session[:cart][@product_id].blank?
-        session[:cart][@product_id] = 1
-      else
-        session[:cart][@product_id] = (session[:cart][@product_id]).to_i + 1
-      end
+      return session[:cart][@product.id.to_s] = 1 if session[:cart][@product.id.to_s].blank?
+      session[:cart][@product.id.to_s] +=  1
     end
   end
 
-  def carts
-
+  def cart
+    if session[:payment_id] != nil
+      Payment.find(session[:payment_id]).destroy
+      session[:payment_id] = nil
+    end
+    if current_user.present?
+      @items = current_user.items.includes(:product)
+    end
   end
 
+  def select_item_to_payment
+    if current_user.present?
+      @items = current_user.items.includes(:product)
+    end    
+  end
   
   def changecart
-    product_id = (params[:cart][:product_id]).to_i
-    amounts = params[:cart][:amounts]
+    amounts = params[:cart][:amounts].to_i
     if current_user.present?
-      item = find_item_in_addcart(product_id)
+      item = Item.find(params[:cart][:item_id])
       item.amounts = amounts
       item.save
     else
+      product_id = (params[:cart][:product_id])
       session[:cart][product_id] = amounts
     end
     redirect_to cart_path
@@ -51,6 +55,5 @@ class CartsController < ApplicationController
       flash.now[:notice] = 'There is an error in your delete item'
       render :new
     end
-
   end
 end
