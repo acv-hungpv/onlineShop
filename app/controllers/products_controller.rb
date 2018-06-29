@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
   end
 
   def update
-    return redirect_to products_url, notice: 'you have successfully update product' if @product.update(product_params)
+    return redirect_back(fallback_location: products_path), notice: 'you have successfully update product' if @product.update(product_params)
     flash[:danger] = 'There is an error in your update product'
     render :edit
   end
